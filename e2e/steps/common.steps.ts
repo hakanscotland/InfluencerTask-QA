@@ -212,8 +212,11 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
   await this.page.getByTestId('login-password-input').fill(user.password);
   await this.page.getByTestId('login-submit-button').click();
 
-  // Wait for redirect to dashboard
-  await this.page.waitForURL(/\/(brand|influencer|admin)/, { timeout: 60000 });
+  // Wait for redirect to dashboard (using pathname function to avoid domain name conflicts)
+  await this.page.waitForURL(url => {
+    const p = url.pathname;
+    return p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+  }, { timeout: 60000 });
 });
 
 Given('I am logged out', async function (this: CustomWorld) {
@@ -419,7 +422,10 @@ Given('I switch to the {string} user tab', async function (this: CustomWorld, ro
   await this.page.getByTestId('login-email-input').fill(user.email);
   await this.page.getByTestId('login-password-input').fill(user.password);
   await this.page.getByTestId('login-submit-button').click();
-  await this.page.waitForURL(/\/(brand|influencer|admin)/, { timeout: 10000 });
+  await this.page.waitForURL(url => {
+    const p = url.pathname;
+    return p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+  }, { timeout: 10000 });
 });
 
 /**
