@@ -1,4 +1,4 @@
-@brand @campaigns
+@smoke @regression @brand @campaigns
 Feature: Brand Campaigns List
   As a brand user
   I want to view and manage my campaigns
@@ -9,6 +9,7 @@ Feature: Brand Campaigns List
     And I am logged in as a "brand" user
     And I navigate to the "brand campaigns" page
 
+  @smoke @critical
   Scenario: Campaigns page loads with table
     Then I should see the element with test id "campaign-table"
     And I should see the element with test id "campaign-table-search-input"

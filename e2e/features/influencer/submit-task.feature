@@ -1,3 +1,4 @@
+@regression @influencer
 Feature: Influencer Task Submission
   As an influencer
   I want to submit completed task work

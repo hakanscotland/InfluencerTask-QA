@@ -1,3 +1,4 @@
+@regression @admin
 Feature: Admin Submission Review
   As an admin
   I want to review influencer task submissions

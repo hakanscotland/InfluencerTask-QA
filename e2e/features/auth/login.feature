@@ -1,3 +1,4 @@
+@smoke @regression
 Feature: User Authentication - Login
   As a registered user
   I want to log in to the platform
@@ -6,6 +7,7 @@ Feature: User Authentication - Login
   Background:
     Given I am on the "login" page
 
+  @smoke @critical
   Scenario: Successful login with email and password
     When I fill the field with test id "login-email-input" with "marka@influencerportal.com.tr"
     And I fill the field with test id "login-password-input" with "Brand.PasswordTest!!"

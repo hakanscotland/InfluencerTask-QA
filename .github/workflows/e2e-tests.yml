@@ -1,0 +1,231 @@
+# ============================================================
+# InfluencerPortal QA — E2E Test Automation Pipeline
+# ============================================================
+#
+# TRIGGERS:
+#   1. schedule  → Daily smoke tests (06:00 UTC) + weekly full regression (Sunday 03:00 UTC)
+#   2. workflow_dispatch → Manual run with env / tag / browser selection
+#   3. push/pull_request → Smoke tests on every change to 'main' branch
+#
+# REQUIRED REPOSITORY SECRETS (Settings → Secrets & Variables → Actions):
+#   BASE_URL_STAGING      → https://staging.influencerportal.com
+#   BASE_URL_PROD         → https://influencerportal.com
+#   QA_USER_EMAIL         → QA test account email
+#   QA_USER_PASSWORD      → QA test account password
+#   SLACK_WEBHOOK_URL     → (optional) Slack incoming webhook for notifications
+# ============================================================
+
+name: 🧪 E2E Test Automation
+
+on:
+  # ──────────────────────────────────────────
+  # 1. SCHEDULED RUNS
+  # ──────────────────────────────────────────
+  schedule:
+    # Daily smoke tests → Every day at 06:00 UTC (09:00 TRT)
+    - cron: '0 6 * * *'
+    # Weekly full regression → Every Sunday at 03:00 UTC (06:00 TRT)
+    - cron: '0 3 * * 0'
+
+  # ──────────────────────────────────────────
+  # 2. MANUAL TRIGGER (workflow_dispatch)
+  # ──────────────────────────────────────────
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '🌍 Target environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+      tags:
+        description: '🏷️ Cucumber tag filter (e.g. @smoke, @regression, @login)'
+        required: false
+        default: '@smoke'
+        type: string
+
+      browser:
+        description: '🌐 Browser to run tests on'
+        required: false
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+
+  # ──────────────────────────────────────────
+  # 3. CODE CHANGE TRIGGERS (PR / Push)
+  # ──────────────────────────────────────────
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# ──────────────────────────────────────────
+# CONCURRENCY: Cancel stale runs on same branch
+# ──────────────────────────────────────────
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================
+  # JOB: Determine run configuration
+  # ============================================================
+  setup:
+    name: 🔧 Resolve Run Config
+    runs-on: ubuntu-latest
+    outputs:
+      base_url: ${{ steps.config.outputs.base_url }}
+      tags: ${{ steps.config.outputs.tags }}
+      browser: ${{ steps.config.outputs.browser }}
+      run_label: ${{ steps.config.outputs.run_label }}
+
+    steps:
+      - name: Resolve environment & tag configuration
+        id: config
+        run: |
+          # ── Determine BASE_URL ──────────────────────────────
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ENV="${{ github.event.inputs.environment }}"
+          elif [ "${{ github.event.schedule }}" = "0 3 * * 0" ]; then
+            ENV="staging"
+          else
+            ENV="staging"
+          fi
+
+          if [ "$ENV" = "production" ]; then
+            echo "base_url=${{ secrets.BASE_URL_PROD }}" >> $GITHUB_OUTPUT
+          else
+            echo "base_url=${{ secrets.BASE_URL_STAGING }}" >> $GITHUB_OUTPUT
+          fi
+
+          # ── Determine TAGS ──────────────────────────────────
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAGS="${{ github.event.inputs.tags }}"
+          elif [ "${{ github.event.schedule }}" = "0 3 * * 0" ]; then
+            # Sunday full regression — no tag filter
+            TAGS=""
+          else
+            # Daily scheduled or push → smoke only
+            TAGS="@smoke"
+          fi
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+
+          # ── Determine BROWSER ───────────────────────────────
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            BROWSER="${{ github.event.inputs.browser }}"
+          else
+            BROWSER="chromium"
+          fi
+          echo "browser=$BROWSER" >> $GITHUB_OUTPUT
+
+          # ── Label for reports ────────────────────────────────
+          if [ -z "$TAGS" ]; then
+            echo "run_label=Full Regression ($ENV)" >> $GITHUB_OUTPUT
+          else
+            echo "run_label=Smoke Tests ($ENV)" >> $GITHUB_OUTPUT
+          fi
+
+  # ============================================================
+  # JOB: Run E2E Tests
+  # ============================================================
+  e2e:
+    name: 🎭 Playwright + Cucumber (${{ needs.setup.outputs.run_label }})
+    runs-on: ubuntu-latest
+    needs: setup
+    timeout-minutes: 30
+
+    steps:
+      # ── 1. Checkout ─────────────────────────────────────────
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Node.js Setup ────────────────────────────────────
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── 3. Install dependencies ──────────────────────────────
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      # ── 4. Install Playwright browsers ──────────────────────
+      - name: 🎭 Install Playwright browsers
+        run: npx playwright install ${{ needs.setup.outputs.browser }} --with-deps
+
+      # ── 5. Run test suite ────────────────────────────────────
+      - name: 🧪 Execute E2E test suite
+        id: run_tests
+        env:
+          BASE_URL:          ${{ needs.setup.outputs.base_url }}
+          QA_USER_EMAIL:     ${{ secrets.QA_USER_EMAIL }}
+          QA_USER_PASSWORD:  ${{ secrets.QA_USER_PASSWORD }}
+          TAGS:              ${{ needs.setup.outputs.tags }}
+          BROWSER:           ${{ needs.setup.outputs.browser }}
+          HEADLESS:          "true"
+          CI:                "true"
+        run: npm run test:e2e:ci
+        # Don't fail the pipeline yet — we still want to upload reports
+        continue-on-error: true
+
+      # ── 6. Upload HTML report ────────────────────────────────
+      - name: 📊 Upload Cucumber HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report-${{ github.run_number }}
+          path: e2e/reports/
+          retention-days: 14
+
+      # ── 7. Upload Playwright traces/screenshots ──────────────
+      - name: 📸 Upload Playwright test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts-${{ github.run_number }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+      # ── 8. Fail the job if tests failed ─────────────────────
+      - name: ❌ Fail if tests failed
+        if: steps.run_tests.outcome == 'failure'
+        run: exit 1
+
+  # ============================================================
+  # JOB: Notify (Slack) — runs after e2e regardless of result
+  # ============================================================
+  notify:
+    name: 🔔 Notify Results
+    runs-on: ubuntu-latest
+    needs: [setup, e2e]
+    if: always() && secrets.SLACK_WEBHOOK_URL != ''
+
+    steps:
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": "${{ needs.e2e.result == 'success' && '✅' || '❌' }} *InfluencerPortal QA — ${{ needs.setup.outputs.run_label }}*",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ needs.e2e.result == 'success' && '✅ All tests passed!' || '❌ Some tests failed!' }}\n*Suite:* ${{ needs.setup.outputs.run_label }}\n*Tags:* `${{ needs.setup.outputs.tags || 'All (no filter)' }}`\n*Browser:* `${{ needs.setup.outputs.browser }}`\n*<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run Details>*"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

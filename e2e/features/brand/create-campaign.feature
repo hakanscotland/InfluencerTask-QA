@@ -1,3 +1,4 @@
+@smoke @regression @brand
 Feature: Campaign Creation
   As a brand
   I want to create a campaign with tasks

@@ -1,0 +1,27 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Local env file (contains secrets)
+.env
+.env.local
+
+# Playwright & Cucumber Reports
+playwright-report/
+test-results/
+e2e/reports/
+html-report/
+cucumber-report.html
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+.DS_Store
+Thumbs.db

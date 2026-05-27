@@ -1,4 +1,4 @@
-@brand @overview
+@smoke @regression @brand @overview
 Feature: Brand Dashboard Overview
   As a brand user
   I want to see my dashboard overview
@@ -8,6 +8,7 @@ Feature: Brand Dashboard Overview
     Given I am logged in as a "brand" user
     And I navigate to the "brand overview" page
 
+  @smoke @critical
   Scenario: Overview page loads with key elements
     Then I should see the element with test id "brand-overview-page"
     And I should see the element with test id "brand-create-campaign-button"
