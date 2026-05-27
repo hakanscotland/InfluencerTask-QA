@@ -58,12 +58,14 @@ on:
           - webkit
 
   # ──────────────────────────────────────────
-  # 3. CODE CHANGE TRIGGERS (PR / Push)
+  # 3. CODE CHANGE TRIGGERS
   # ──────────────────────────────────────────
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # NOT: Şimdilik devre dışı — her push'ta test tetiklenmesin.
+  # Staging hazır olunca aşağıdaki satırları uncomment et:
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
 # ──────────────────────────────────────────
 # CONCURRENCY: Cancel stale runs on same branch
@@ -209,15 +211,20 @@ jobs:
 
   # ============================================================
   # JOB: Notify (Slack) — runs after e2e regardless of result
+  # Hazır olunca: Settings → Secrets → SLACK_WEBHOOK_URL ekle
   # ============================================================
   notify:
     name: 🔔 Notify Results
     runs-on: ubuntu-latest
     needs: [setup, e2e]
-    if: always() && secrets.SLACK_WEBHOOK_URL != ''
+    # DÜZELTME: secrets job-level if içinde kullanılamaz.
+    # Bunun yerine step içinde kontrol ediyoruz.
+    if: always()
 
     steps:
       - name: Send Slack notification
+        # SLACK_WEBHOOK_URL secret'ı set edilmemişse bu adım skip edilir
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
