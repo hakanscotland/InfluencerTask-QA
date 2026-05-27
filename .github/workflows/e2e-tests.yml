@@ -8,10 +8,10 @@
 #   3. push/pull_request → Smoke tests on every change to 'main' branch
 #
 # REQUIRED REPOSITORY SECRETS (Settings → Secrets & Variables → Actions):
-#   BASE_URL_STAGING      → https://staging.influencerportal.com
-#   BASE_URL_PROD         → https://influencerportal.com
-#   QA_USER_EMAIL         → QA test account email
-#   QA_USER_PASSWORD      → QA test account password
+#   BASE_URL_PROD         → https://influencerportal.com  ✅ (zorunlu)
+#   QA_USER_EMAIL         → QA test account email         ✅ (zorunlu)
+#   QA_USER_PASSWORD      → QA test account password      ✅ (zorunlu)
+#   BASE_URL_STAGING      → https://staging.influencerportal.com  ⏳ (hazır olunca ekle)
 #   SLACK_WEBHOOK_URL     → (optional) Slack incoming webhook for notifications
 # ============================================================
 
@@ -35,11 +35,11 @@ on:
       environment:
         description: '🌍 Target environment'
         required: true
-        default: 'staging'
+        default: 'production'
         type: choice
         options:
-          - staging
           - production
+          - staging
 
       tags:
         description: '🏷️ Cucumber tag filter (e.g. @smoke, @regression, @login)'
@@ -89,29 +89,36 @@ jobs:
       - name: Resolve environment & tag configuration
         id: config
         run: |
-          # ── Determine BASE_URL ──────────────────────────────
+          # ── Determine ENV name ──────────────────────────────
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             ENV="${{ github.event.inputs.environment }}"
-          elif [ "${{ github.event.schedule }}" = "0 3 * * 0" ]; then
-            ENV="staging"
           else
-            ENV="staging"
+            # Scheduled & push runs → production (staging hazır değil)
+            ENV="production"
           fi
 
-          if [ "$ENV" = "production" ]; then
-            echo "base_url=${{ secrets.BASE_URL_PROD }}" >> $GITHUB_OUTPUT
+          # ── Determine BASE_URL ──────────────────────────────
+          # Staging secret varsa kullan, yoksa production'a düş
+          STAGING_URL="${{ secrets.BASE_URL_STAGING }}"
+          PROD_URL="${{ secrets.BASE_URL_PROD }}"
+
+          if [ "$ENV" = "staging" ] && [ -n "$STAGING_URL" ]; then
+            echo "base_url=$STAGING_URL" >> $GITHUB_OUTPUT
           else
-            echo "base_url=${{ secrets.BASE_URL_STAGING }}" >> $GITHUB_OUTPUT
+            # Staging seçilmiş ama secret yoksa → prod'a düş
+            echo "base_url=$PROD_URL" >> $GITHUB_OUTPUT
+            # Ortam adını da prod olarak düzelt
+            ENV="production"
           fi
 
           # ── Determine TAGS ──────────────────────────────────
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             TAGS="${{ github.event.inputs.tags }}"
           elif [ "${{ github.event.schedule }}" = "0 3 * * 0" ]; then
-            # Sunday full regression — no tag filter
+            # Pazar full regression — tag filtresi yok
             TAGS=""
           else
-            # Daily scheduled or push → smoke only
+            # Günlük ve push → sadece smoke
             TAGS="@smoke"
           fi
           echo "tags=$TAGS" >> $GITHUB_OUTPUT
