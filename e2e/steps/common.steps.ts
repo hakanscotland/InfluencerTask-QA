@@ -234,7 +234,7 @@ Given('the test data is reset for influencer user', async function (this: Custom
   // Use native Node.js fetch (available in Node 18+) with an absolute URL.
   // We cannot use this.page.request here because the browser page hasn't
   // navigated anywhere yet, which causes the request to hang indefinitely.
-  const baseURL = process.env.TEST_BASE_URL || 'http://localhost:3000';
+  const baseURL = process.env.BASE_URL || 'https://influencerportal.com';
   const secret = process.env.E2E_RESET_SECRET || 'e2e-test-local';
 
   try {
@@ -427,7 +427,7 @@ Given('I switch to the {string} user tab', async function (this: CustomWorld, ro
  * for testing the Admin Submissions review pages.
  */
 Given('the test data is reset with a pending submission', async function (this: CustomWorld) {
-  const baseURL = process.env.TEST_BASE_URL || 'http://localhost:3000';
+  const baseURL = process.env.BASE_URL || 'https://influencerportal.com';
   const secret = process.env.E2E_RESET_SECRET || 'e2e-test-local';
 
   try {
