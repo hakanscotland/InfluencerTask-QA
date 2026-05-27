@@ -1,0 +1,23 @@
+{
+  "name": "influencer-portal-qa",
+  "version": "1.0.0",
+  "description": "InfluencerPortal Playwright Cucumber E2E QA Test Framework",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test:e2e": "tsx node_modules/.bin/cucumber-js --config e2e/cucumber.mjs",
+    "test:e2e:headed": "HEADLESS=false tsx node_modules/.bin/cucumber-js --config e2e/cucumber.mjs",
+    "test:e2e:debug": "HEADLESS=false SLOW_MO=500 tsx node_modules/.bin/cucumber-js --config e2e/cucumber.mjs",
+    "test:e2e:ci": "CI=true tsx node_modules/.bin/cucumber-js --config e2e/cucumber.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.8.3",
+    "@cucumber/pretty-formatter": "^3.3.0",
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^20.19.39",
+    "dotenv": "^17.4.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
