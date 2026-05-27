@@ -26,6 +26,9 @@ Feature: Campaign Creation
   Scenario: Add a task in the task builder (Step 2)
     Given I click the element with test id "brand-create-campaign-button"
     And I fill the field with test id "wizard-step-1-title-input" with "Summer Promo 2026"
+    And I fill the field with test id "wizard-step-1-description-textarea" with "A summer promotional campaign for our new product line."
+    And I select "Fashion" from the dropdown with test id "wizard-step-1-category-select"
+    And I fill the field with test id "wizard-step-1-budget-input" with "5000"
     And I click the element with test id "campaign-wizard-next-button"
     When I click the element with test id "wizard-step-2-add-task-button"
     Then I should see the element with test id "task-builder-task-item-0"
