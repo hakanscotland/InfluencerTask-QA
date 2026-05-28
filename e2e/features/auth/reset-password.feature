@@ -18,3 +18,9 @@ Feature: Reset Password
     And I should see the element with test id "reset-password-password-input"
     And I should see the element with test id "reset-password-confirm-input"
     And I should see the element with test id "reset-password-submit-button"
+
+  Scenario: Reset password without token is blocked
+    Given I navigate to the "reset password" page
+    Then I should see the element with test id "reset-password-error-message"
+    And the element with test id "reset-password-submit-button" should be disabled
+    And I should see the element with test id "reset-password-login-link"

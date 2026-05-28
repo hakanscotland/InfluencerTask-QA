@@ -9,12 +9,22 @@ Feature: Influencer Social Accounts
     And I navigate to the "influencer social" page
 
   Scenario: Social accounts page loads
-    Then I should see the element with test id "social-page"
+    Then the page should contain text "Social Accounts"
+    And I should see the element with test id "connect-social-form"
 
-  Scenario: Social page shows connect button
-    Then I should see the element with test id "social-connect-button"
+  Scenario: Social connect form has platform choices
+    Then I should see the element with test id "connect-social-platform-instagram"
+    And I should see the element with test id "connect-social-platform-tiktok"
+    And I should see the element with test id "connect-social-platform-youtube"
+    And I should see the element with test id "connect-social-platform-twitter"
+    And I should see a field with placeholder "username"
+
+  Scenario: Select a platform to connect
+    When I check the checkbox with test id "connect-social-platform-instagram"
+    Then the checkbox with test id "connect-social-platform-instagram" should be checked
+    And I should see a button containing text "Verify Connection"
 
   @mobile
   Scenario: Social accounts on mobile
     Given I set viewport to mobile
-    Then I should see the element with test id "social-page"
+    Then I should see the element with test id "connect-social-form"

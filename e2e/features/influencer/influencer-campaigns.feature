@@ -12,8 +12,23 @@ Feature: Influencer My Campaigns
     Then I should see the element with test id "influencer-campaigns-page"
 
   Scenario: Campaign tabs are visible
-    Then the page may contain text "Aktif"
-    Then the page may contain text "Active"
+    Then I should see the element with test id "influencer-campaigns-tab-applications"
+    And I should see the element with test id "influencer-campaigns-tab-opportunities"
+    And I should see the element with test id "influencer-campaigns-tab-created"
+
+  Scenario: Empty participations state is visible
+    Then I should see the element with test id "campaign-table-empty-state"
+    And the page should contain text "No participations yet"
+
+  Scenario: New opportunities tab shows campaign cards
+    When I click the element with test id "influencer-campaigns-tab-opportunities"
+    Then I should see the element with test id "influencer-campaigns-tab-panel-opportunities"
+    And I should see the element with test id matching pattern "campaign-card-.*"
+
+  Scenario: Created campaigns tab has a create campaign entry point
+    When I click the element with test id "influencer-campaigns-tab-created"
+    Then I should see the element with test id "influencer-campaigns-tab-panel-created"
+    And the page should contain text "Create Campaign"
 
   @mobile
   Scenario: My campaigns on mobile

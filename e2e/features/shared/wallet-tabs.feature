@@ -5,7 +5,7 @@ Feature: Wallet Tab Switching
   So that I can manage both fiat and token balances
 
   Background:
-    Given I am logged in as a "brand" user
+    Given I am logged in as an "influencer" user
     And I navigate to the "wallet" page
 
   Scenario: Wallet tabs are visible
@@ -27,6 +27,20 @@ Feature: Wallet Tab Switching
   Scenario: Deposit button is visible in TRY tab
     Then I should see the element with test id "wallet-deposit-button"
     And I should see the element with test id "wallet-withdraw-button"
+
+  Scenario: Deposit modal requests an amount
+    When I click the element with test id "wallet-deposit-button"
+    Then the page should contain text "Bakiye Yükle"
+    And I should see a field with placeholder "Örn: 5000"
+    And I should see a button containing text "DEVAM ET"
+
+  Scenario: Withdrawal modal requests bank details
+    When I click the element with test id "wallet-withdraw-button"
+    Then the page should contain text "Withdrawal Request"
+    And I should see a field with placeholder "Örn: 500"
+    And I should see a field with placeholder "Bank Name"
+    And I should see a field with placeholder "TR... (IBAN)"
+    And I should see a field with placeholder "Account Holder Name"
 
   @mobile
   Scenario: Wallet tabs on mobile

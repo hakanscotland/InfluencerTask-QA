@@ -22,13 +22,10 @@ This framework operates completely independently from the main application codeb
    ```bash
    npx playwright install
    ```
-4. Kök dizinde bulunan `.env.example` dosyasının bir kopyasını oluşturup adını `.env` olarak değiştirin:
-   ```bash
-   cp .env.example .env
-   ```
-5. `.env` dosyasını açıp test koşturmak istediğiniz hedef adresi (`BASE_URL`) ve varsa test hesap bilgilerini girin:
+4. Kok dizindeki `.env` dosyasini acip test kosturmak istediginiz hedef adresi (`BASE_URL`) ve test hesap bilgilerini girin.
    ```env
-   BASE_URL=https://staging.influencerportal.com
+   BASE_URL=https://influencerportal.com.tr
+   APP_LOCALE=en
    ```
 
 ### Testleri Çalıştırma
@@ -63,13 +60,10 @@ This framework operates completely independently from the main application codeb
    ```bash
    npx playwright install
    ```
-4. Create a copy of the `.env.example` file and name it `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-5. Open your `.env` file and set your target `BASE_URL` (Staging, Pre-prod, or Production) alongside test account credentials:
+4. Open the root `.env` file and set your target `BASE_URL` (Staging, Pre-prod, or Production) alongside test account credentials.
    ```env
-   BASE_URL=https://staging.influencerportal.com
+   BASE_URL=https://influencerportal.com.tr
+   APP_LOCALE=en
    ```
 
 ### Running Tests
@@ -100,7 +94,7 @@ qa-test-repository/
 │   └── utils/            # Helper utilities and shared assertions
 ├── playwright.config.ts  # Isolated Playwright browser configs
 ├── package.json          # Dedicated test dependencies
-├── .env.example          # Baseline environment template
+â”œâ”€â”€ .env                  # Local environment values (gitignored)
 └── README.md             # This onboarding guide
 ```
 

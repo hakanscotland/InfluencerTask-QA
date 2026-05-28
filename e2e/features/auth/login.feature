@@ -9,11 +9,9 @@ Feature: User Authentication - Login
 
   @smoke @critical
   Scenario: Successful login with email and password
-    When I fill the field with test id "login-email-input" with "marka@influencerportal.com.tr"
-    And I fill the field with test id "login-password-input" with "Brand.PasswordTest!!"
-    And I click the element with test id "login-submit-button"
+    When I log in with configured credentials
     Then I should see the element with test id "dashboard-layout"
-    And the URL should contain "/brand"
+    And the page should contain text "Welcome"
 
   Scenario: Login with invalid credentials shows error
     When I fill the field with test id "login-email-input" with "wrong@example.com"
@@ -26,6 +24,12 @@ Feature: User Authentication - Login
     When I fill the field with test id "login-password-input" with "somepassword"
     And I click the element with test id "login-submit-button"
     Then the element with test id "login-email-input" should have value ""
+
+  Scenario: Login with empty password keeps user on login page
+    When I fill the field with test id "login-email-input" with "user@example.com"
+    And I click the element with test id "login-submit-button"
+    Then the element with test id "login-password-input" should have value ""
+    And the URL should contain "/login"
 
   Scenario: Login form contains all required fields
     Then I should see the element with test id "login-email-input"

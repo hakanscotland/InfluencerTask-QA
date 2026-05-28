@@ -1,3 +1,9 @@
+import dotenv from 'dotenv';
+
+for (const path of ['.env.local', '.env']) {
+  dotenv.config({ path });
+}
+
 /**
  * Cucumber ESM configuration for BDD E2E tests.
  *

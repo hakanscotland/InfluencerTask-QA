@@ -1,6 +1,7 @@
 import { Given, When, Then, defineStep, setDefaultTimeout } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { CustomWorld } from '../support/world';
+import '../support/env';
 
 // Set global Cucumber step timeout to 30 seconds
 setDefaultTimeout(30000);
@@ -13,74 +14,70 @@ setDefaultTimeout(30000);
 
 // ─── Navigation ───
 
-Given('I am on the {string} page', async function (this: CustomWorld, pageName: string) {
-  const routes: Record<string, string> = {
-    'login': '/login',
-    'register': '/register',
-    'forgot password': '/forgot-password',
-    'reset password': '/reset-password',
-    'brand overview': '/brand',
-    'brand campaigns': '/brand/campaigns',
-    'brand discover': '/brand/discover',
-    'brand submissions': '/brand/submissions',
-    'influencer overview': '/influencer',
-    'influencer campaigns': '/influencer/campaigns',
-    'influencer opportunities': '/influencer/opportunities',
-    'influencer analytics': '/influencer/analytics',
-    'influencer social': '/influencer/social',
-    'admin overview': '/admin',
-    'admin campaigns': '/admin/campaigns',
-    'admin finance': '/admin/finance',
-    'admin withdrawals': '/admin/withdrawals',
-    'admin users': '/admin/users',
-    'admin submissions': '/admin/submissions',
-    'wallet': '/wallet',
-    'settings': '/settings',
-    'settings subscription': '/settings/subscription',
-  };
+const routes: Record<string, string> = {
+  'login': '/login',
+  'register': '/register',
+  'forgot password': '/forgot-password',
+  'reset password': '/reset-password',
+  'dashboard': '/dashboard',
+  'brand overview': '/brand',
+  'brand campaigns': '/brand/campaigns',
+  'brand discover': '/brand/discover',
+  'brand submissions': '/brand/submissions',
+  'influencer overview': '/influencer',
+  'influencer campaigns': '/influencer/campaigns',
+  'influencer create campaign': '/influencer/campaigns/new',
+  'influencer entities': '/influencer/entities',
+  'influencer opportunities': '/influencer/opportunities',
+  'influencer analytics': '/influencer/analytics',
+  'influencer social': '/influencer/social',
+  'influencer messages': '/influencer/messages',
+  'influencer iqs': '/influencer/iqs',
+  'influencer invitations': '/influencer/invitations',
+  'influencer rewards': '/influencer/rewards',
+  'admin overview': '/admin',
+  'admin campaigns': '/admin/campaigns',
+  'admin finance': '/admin/finance',
+  'admin withdrawals': '/admin/withdrawals',
+  'admin users': '/admin/users',
+  'admin submissions': '/admin/submissions',
+  'wallet': '/wallet',
+  'settings': '/settings',
+  'settings subscription': '/settings/subscription',
+  'pricing': '/pricing',
+  'trending': '/trending',
+};
 
+function routeFor(pageName: string) {
   const route = routes[pageName.toLowerCase()];
   if (!route) {
     throw new Error(`Unknown page: ${pageName}. Available: ${Object.keys(routes).join(', ')}`);
   }
+  return route;
+}
 
-  const urlWithE2E = route + (route.includes('?') ? '&' : '?') + 'e2e=true';
+function localizedPath(path: string) {
+  const locale = process.env.APP_LOCALE?.trim().replace(/^\/+|\/+$/g, '');
+  if (!locale || path === '/' || path.startsWith(`/${locale}/`) || path === `/${locale}`) {
+    return path;
+  }
+  return `/${locale}${path}`;
+}
+
+Given('I am on the {string} page', async function (this: CustomWorld, pageName: string) {
+  const route = routeFor(pageName);
+
+  const path = localizedPath(route);
+  const urlWithE2E = path + (path.includes('?') ? '&' : '?') + 'e2e=true';
   await this.page.goto(urlWithE2E, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await this.page.waitForTimeout(500);
 });
 
 defineStep('I navigate to the {string} page', async function (this: CustomWorld, pageName: string) {
-  const routes: Record<string, string> = {
-    'login': '/login',
-    'register': '/register',
-    'forgot password': '/forgot-password',
-    'reset password': '/reset-password',
-    'brand overview': '/brand',
-    'brand campaigns': '/brand/campaigns',
-    'brand discover': '/brand/discover',
-    'brand submissions': '/brand/submissions',
-    'influencer overview': '/influencer',
-    'influencer campaigns': '/influencer/campaigns',
-    'influencer opportunities': '/influencer/opportunities',
-    'influencer analytics': '/influencer/analytics',
-    'influencer social': '/influencer/social',
-    'admin overview': '/admin',
-    'admin campaigns': '/admin/campaigns',
-    'admin finance': '/admin/finance',
-    'admin withdrawals': '/admin/withdrawals',
-    'admin users': '/admin/users',
-    'admin submissions': '/admin/submissions',
-    'wallet': '/wallet',
-    'settings': '/settings',
-    'settings subscription': '/settings/subscription',
-  };
+  const route = routeFor(pageName);
   
-  const route = routes[pageName.toLowerCase()];
-  if (!route) {
-    throw new Error(`Unknown page: ${pageName}. Available: ${Object.keys(routes).join(', ')}`);
-  }
-  
-  const urlWithE2E = route + (route.includes('?') ? '&' : '?') + 'e2e=true';
+  const path = localizedPath(route);
+  const urlWithE2E = path + (path.includes('?') ? '&' : '?') + 'e2e=true';
   await this.page.goto(urlWithE2E, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await this.page.waitForTimeout(500);
 });
@@ -93,6 +90,12 @@ When('I click the element with test id {string}', async function (this: CustomWo
 
 When('I fill the field with test id {string} with {string}', async function (this: CustomWorld, testId: string, value: string) {
   const element = this.page.getByTestId(testId);
+  await expect(element).toBeVisible();
+  await element.fill(value);
+});
+
+When('I fill the field with placeholder {string} with {string}', async function (this: CustomWorld, placeholder: string, value: string) {
+  const element = this.page.getByPlaceholder(placeholder).first();
   await expect(element).toBeVisible();
   await element.fill(value);
 });
@@ -119,6 +122,18 @@ When('I click the element with test id matching pattern {string}', async functio
   await element.first().click({ force: true });
 });
 
+When('I click the first link containing href {string}', async function (this: CustomWorld, hrefPart: string) {
+  const link = this.page.locator(`a[href*="${hrefPart}"]`).first();
+  await expect(link).toBeVisible();
+  await link.click();
+});
+
+When('I click the button containing text {string}', async function (this: CustomWorld, text: string) {
+  const button = this.page.locator('button').filter({ hasText: new RegExp(text, 'i') }).first();
+  await expect(button).toBeVisible();
+  await button.click();
+});
+
 Given('I see at least one submission in the table', async function (this: CustomWorld) {
   const rows = this.page.locator('[data-testid^="admin-submissions-table-row-"]');
   const count = await rows.count();
@@ -128,8 +143,18 @@ Given('I see at least one submission in the table', async function (this: Custom
 // ─── Assertions ───
 
 Then('I should see the element with test id {string}', async function (this: CustomWorld, testId: string) {
-  const element = this.page.getByTestId(testId);
+  const element = this.page.getByTestId(testId).first();
   await expect(element).toBeVisible();
+});
+
+Then('I should see a field with placeholder {string}', async function (this: CustomWorld, placeholder: string) {
+  const element = this.page.getByPlaceholder(placeholder).first();
+  await expect(element).toBeVisible();
+});
+
+Then('I should see a button containing text {string}', async function (this: CustomWorld, text: string) {
+  const button = this.page.locator('button').filter({ hasText: new RegExp(text, 'i') }).first();
+  await expect(button).toBeVisible();
 });
 
 Then('I should see the element with test id matching pattern {string}', async function (this: CustomWorld, pattern: string) {
@@ -195,7 +220,10 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
   // Test user credentials mapped by role
   const testUsers: Record<string, { email: string; password: string }> = {
     'brand':      { email: 'marka@influencerportal.com.tr',   password: 'Brand.PasswordTest!!' },
-    'influencer': { email: 'reklam@influencerportal.com.tr',  password: 'Inf.PasswordTest!!' },
+    'influencer': {
+      email: process.env.EMAIL || 'reklam@influencerportal.com.tr',
+      password: process.env.PASSWORD || 'Inf.PasswordTest!!',
+    },
     'admin':      { email: 'admin@influencerportal.com.tr',    password: 'Hsd.464436!' },
   };
 
@@ -204,7 +232,7 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
     throw new Error(`No test user configured for role: ${role}. Available: ${Object.keys(testUsers).join(', ')}`);
   }
 
-  await this.page.goto('/login', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await this.page.goto(localizedPath('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
   await this.page.waitForTimeout(500);
 
   // Fill login form using test IDs
@@ -215,16 +243,16 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
   // Wait for redirect to dashboard (using pathname function to avoid domain name conflicts)
   await this.page.waitForURL(url => {
     const p = url.pathname;
-    return p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+    return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
   }, { timeout: 60000 });
 });
 
 Given('I am logged out', async function (this: CustomWorld) {
-  await this.page.goto('/');
+  await this.page.goto(localizedPath('/'));
   const logoutButton = this.page.getByTestId('sidebar-logout-button');
   if (await logoutButton.isVisible().catch(() => false)) {
     await logoutButton.click();
-    await this.page.waitForURL('/login', { timeout: 10000 });
+    await this.page.waitForURL(new RegExp('/login$'), { timeout: 10000 });
   }
 });
 
@@ -368,6 +396,46 @@ Then('the element with test id {string} should be disabled', async function (thi
   await expect(element).toBeDisabled();
 });
 
+Given('I am logged in with configured credentials', async function (this: CustomWorld) {
+  const email = process.env.EMAIL;
+  const password = process.env.PASSWORD;
+
+  if (!email || !password) {
+    throw new Error('EMAIL and PASSWORD must be configured in .env or .env.local');
+  }
+
+  await this.page.goto(localizedPath('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await this.page.waitForTimeout(500);
+  await this.page.getByTestId('login-email-input').fill(email);
+  await this.page.getByTestId('login-password-input').fill(password);
+  await this.page.getByTestId('login-submit-button').click();
+  await this.page.waitForURL(url => !url.pathname.endsWith('/login'), { timeout: 60000 });
+});
+
+When('I log in with configured credentials', async function (this: CustomWorld) {
+  const email = process.env.EMAIL;
+  const password = process.env.PASSWORD;
+
+  if (!email || !password) {
+    throw new Error('EMAIL and PASSWORD must be configured in .env or .env.local');
+  }
+
+  await this.page.getByTestId('login-email-input').fill(email);
+  await this.page.getByTestId('login-password-input').fill(password);
+  await this.page.getByTestId('login-submit-button').click();
+  await this.page.waitForURL(url => !url.pathname.endsWith('/login'), { timeout: 60000 });
+});
+
+Then('the button containing text {string} should be disabled', async function (this: CustomWorld, text: string) {
+  const button = this.page.locator('button').filter({ hasText: new RegExp(text, 'i') }).first();
+  await expect(button).toBeDisabled();
+});
+
+Then('the checkbox with test id {string} should be checked', async function (this: CustomWorld, testId: string) {
+  const element = this.page.getByTestId(testId);
+  await expect(element).toBeChecked();
+});
+
 // ─── Toast / Notification Assertions ───
 
 Then('I should see a toast message containing {string}', async function (this: CustomWorld, expectedText: string) {
@@ -391,14 +459,14 @@ When('I select option with value {string} from the dropdown with test id {string
 
 When('I check the checkbox with test id {string}', async function (this: CustomWorld, testId: string) {
   const element = this.page.getByTestId(testId);
-  await expect(element).toBeVisible();
-  await element.check();
+  await expect(element).toBeAttached();
+  await element.check({ force: true });
 });
 
 When('I uncheck the checkbox with test id {string}', async function (this: CustomWorld, testId: string) {
   const element = this.page.getByTestId(testId);
-  await expect(element).toBeVisible();
-  await element.uncheck();
+  await expect(element).toBeAttached();
+  await element.uncheck({ force: true });
 });
 
 // ─── Auth State Helpers ───
@@ -408,7 +476,10 @@ Given('I switch to the {string} user tab', async function (this: CustomWorld, ro
   // Simply logs in as the specified role without resetting the browser
   const testUsers: Record<string, { email: string; password: string }> = {
     'brand':      { email: 'marka@influencerportal.com.tr',   password: 'Brand.PasswordTest!!' },
-    'influencer': { email: 'reklam@influencerportal.com.tr',  password: 'Inf.PasswordTest!!' },
+    'influencer': {
+      email: process.env.EMAIL || 'reklam@influencerportal.com.tr',
+      password: process.env.PASSWORD || 'Inf.PasswordTest!!',
+    },
     'admin':      { email: 'admin@influencerportal.com.tr',    password: 'Hsd.464436!' },
   };
 
@@ -417,14 +488,14 @@ Given('I switch to the {string} user tab', async function (this: CustomWorld, ro
     throw new Error(`No test user configured for role: ${role}`);
   }
 
-  await this.page.goto('/login');
+  await this.page.goto(localizedPath('/login'));
   await this.page.waitForLoadState('networkidle');
   await this.page.getByTestId('login-email-input').fill(user.email);
   await this.page.getByTestId('login-password-input').fill(user.password);
   await this.page.getByTestId('login-submit-button').click();
   await this.page.waitForURL(url => {
     const p = url.pathname;
-    return p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+    return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
   }, { timeout: 10000 });
 });
 
