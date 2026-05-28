@@ -18,7 +18,7 @@ on:
           - production
           - staging
       tags:
-        description: 'Optional Cucumber tag filter. Leave empty to run every test.'
+        description: 'smoke'
         required: false
         default: ''
         type: string
