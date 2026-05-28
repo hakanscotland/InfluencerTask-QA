@@ -43,8 +43,8 @@ export default defineConfig({
     /* Capture screenshot on failure */
     screenshot: 'only-on-failure',
     
-    /* Record video on retry */
-    video: 'on-first-retry',
+    /* Record video only for local Playwright runs, not CI artifacts. */
+    video: process.env.CI ? 'off' : 'on',
   },
   
   /* Configure projects for major browsers */

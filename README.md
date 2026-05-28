@@ -80,6 +80,12 @@ This framework operates completely independently from the main application codeb
   npm run test:e2e:debug
   ```
 
+### GitHub Actions Reports
+- Pushes and pull requests run the full Cucumber suite unless a manual workflow run provides a tag filter.
+- GitHub Actions shows a readable E2E summary directly on the workflow run page.
+- The full HTML report is uploaded as the `e2e-cucumber-report-*` artifact.
+- CI does not record videos. Videos are recorded only for local runs.
+
 ---
 
 ## 📁 Repository Structure / Klasör Yapısı

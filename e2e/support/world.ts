@@ -48,7 +48,7 @@ class PlaywrightWorld extends World implements CustomWorld {
       // BASE_URL → workflow'dan gelen env variable (TEST_BASE_URL eski isimdi, kaldırıldı)
       baseURL: process.env.BASE_URL || 'https://influencerportal.com',
       viewport: { width: 1280, height: 720 },
-      recordVideo: process.env.CI ? { dir: 'e2e/reports/videos/' } : undefined,
+      recordVideo: process.env.CI === 'true' ? undefined : { dir: 'e2e/reports/videos/' },
     });
     this.page = await this.context.newPage();
     
