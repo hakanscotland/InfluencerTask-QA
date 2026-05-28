@@ -1,11 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'path';
-
-// Load environment variables with local files taking precedence over .env.
-for (const envFile of ['.env.local', '.env']) {
-  dotenv.config({ path: envFile });
-}
+import { requiredEnv } from './e2e/support/env';
 
 /**
  * Standalone Playwright QA E2E Test Configuration
@@ -35,7 +29,7 @@ export default defineConfig({
     testIdAttribute: 'data-testid',
 
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL || 'https://staging.influencerportal.com',
+    baseURL: requiredEnv('BASE_URL'),
     
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',

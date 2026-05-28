@@ -1,7 +1,7 @@
 import { Given, When, Then, defineStep, setDefaultTimeout } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
 import { CustomWorld } from '../support/world';
-import '../support/env';
+import { optionalEnv, requiredEnv } from '../support/env';
 
 // Set global Cucumber step timeout to 30 seconds
 setDefaultTimeout(30000);
@@ -64,6 +64,35 @@ function localizedPath(path: string) {
   return `/${locale}${path}`;
 }
 
+const roleCredentialEnv: Record<string, { email: string; password: string }> = {
+  brand: { email: 'QA_BRAND_EMAIL', password: 'QA_BRAND_PASSWORD' },
+  influencer: { email: 'QA_USER_EMAIL', password: 'QA_USER_PASSWORD' },
+  admin: { email: 'QA_ADMIN_EMAIL', password: 'QA_ADMIN_PASSWORD' },
+};
+
+function credentialsForRole(role: string) {
+  const keys = roleCredentialEnv[role.toLowerCase()];
+  if (!keys) {
+    throw new Error(`No test user configured for role: ${role}. Available: ${Object.keys(roleCredentialEnv).join(', ')}`);
+  }
+
+  return {
+    email: requiredEnv(keys.email),
+    password: requiredEnv(keys.password),
+  };
+}
+
+function configuredCredentials() {
+  return {
+    email: optionalEnv('EMAIL') ?? requiredEnv('QA_USER_EMAIL'),
+    password: optionalEnv('PASSWORD') ?? requiredEnv('QA_USER_PASSWORD'),
+  };
+}
+
+function e2eBaseURL() {
+  return requiredEnv('BASE_URL').replace(/\/+$/, '');
+}
+
 Given('I am on the {string} page', async function (this: CustomWorld, pageName: string) {
   const route = routeFor(pageName);
 
@@ -92,6 +121,12 @@ When('I fill the field with test id {string} with {string}', async function (thi
   const element = this.page.getByTestId(testId);
   await expect(element).toBeVisible();
   await element.fill(value);
+});
+
+When('I fill the field with test id {string} with env var {string}', async function (this: CustomWorld, testId: string, envName: string) {
+  const element = this.page.getByTestId(testId);
+  await expect(element).toBeVisible();
+  await element.fill(requiredEnv(envName));
 });
 
 When('I fill the field with placeholder {string} with {string}', async function (this: CustomWorld, placeholder: string, value: string) {
@@ -190,6 +225,11 @@ Then('the element with test id {string} should have value {string}', async funct
   await expect(element).toHaveValue(expectedValue);
 });
 
+Then('the element with test id {string} should have value from env var {string}', async function (this: CustomWorld, testId: string, envName: string) {
+  const element = this.page.getByTestId(testId);
+  await expect(element).toHaveValue(requiredEnv(envName));
+});
+
 Then('the URL should be {string}', async function (this: CustomWorld, expectedPath: string) {
   await expect(this.page).toHaveURL(new RegExp(expectedPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
@@ -217,20 +257,7 @@ Then('I should see an error message containing {string}', async function (this: 
 // ─── Auth Helpers ───
 
 defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: CustomWorld, role: string) {
-  // Test user credentials mapped by role
-  const testUsers: Record<string, { email: string; password: string }> = {
-    'brand':      { email: 'marka@influencerportal.com.tr',   password: 'Brand.PasswordTest!!' },
-    'influencer': {
-      email: process.env.EMAIL || 'reklam@influencerportal.com.tr',
-      password: process.env.PASSWORD || 'Inf.PasswordTest!!',
-    },
-    'admin':      { email: 'admin@influencerportal.com.tr',    password: 'Hsd.464436!' },
-  };
-
-  const user = testUsers[role.toLowerCase()];
-  if (!user) {
-    throw new Error(`No test user configured for role: ${role}. Available: ${Object.keys(testUsers).join(', ')}`);
-  }
+  const user = credentialsForRole(role);
 
   await this.page.goto(localizedPath('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
   await this.page.waitForTimeout(500);
@@ -265,8 +292,8 @@ Given('the test data is reset for influencer user', async function (this: Custom
   // Use native Node.js fetch (available in Node 18+) with an absolute URL.
   // We cannot use this.page.request here because the browser page hasn't
   // navigated anywhere yet, which causes the request to hang indefinitely.
-  const baseURL = process.env.BASE_URL || 'https://influencerportal.com';
-  const secret = process.env.E2E_RESET_SECRET || 'e2e-test-local';
+  const baseURL = e2eBaseURL();
+  const secret = requiredEnv('E2E_RESET_SECRET');
 
   try {
     const controller = new AbortController();
@@ -397,12 +424,7 @@ Then('the element with test id {string} should be disabled', async function (thi
 });
 
 Given('I am logged in with configured credentials', async function (this: CustomWorld) {
-  const email = process.env.EMAIL;
-  const password = process.env.PASSWORD;
-
-  if (!email || !password) {
-    throw new Error('EMAIL and PASSWORD must be configured in .env or .env.local');
-  }
+  const { email, password } = configuredCredentials();
 
   await this.page.goto(localizedPath('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
   await this.page.waitForTimeout(500);
@@ -413,12 +435,7 @@ Given('I am logged in with configured credentials', async function (this: Custom
 });
 
 When('I log in with configured credentials', async function (this: CustomWorld) {
-  const email = process.env.EMAIL;
-  const password = process.env.PASSWORD;
-
-  if (!email || !password) {
-    throw new Error('EMAIL and PASSWORD must be configured in .env or .env.local');
-  }
+  const { email, password } = configuredCredentials();
 
   await this.page.getByTestId('login-email-input').fill(email);
   await this.page.getByTestId('login-password-input').fill(password);
@@ -472,21 +489,7 @@ When('I uncheck the checkbox with test id {string}', async function (this: Custo
 // ─── Auth State Helpers ───
 
 Given('I switch to the {string} user tab', async function (this: CustomWorld, role: string) {
-  // Used when a scenario switches between users within one browser context
-  // Simply logs in as the specified role without resetting the browser
-  const testUsers: Record<string, { email: string; password: string }> = {
-    'brand':      { email: 'marka@influencerportal.com.tr',   password: 'Brand.PasswordTest!!' },
-    'influencer': {
-      email: process.env.EMAIL || 'reklam@influencerportal.com.tr',
-      password: process.env.PASSWORD || 'Inf.PasswordTest!!',
-    },
-    'admin':      { email: 'admin@influencerportal.com.tr',    password: 'Hsd.464436!' },
-  };
-
-  const user = testUsers[role.toLowerCase()];
-  if (!user) {
-    throw new Error(`No test user configured for role: ${role}`);
-  }
+  const user = credentialsForRole(role);
 
   await this.page.goto(localizedPath('/login'));
   await this.page.waitForLoadState('networkidle');
@@ -504,8 +507,8 @@ Given('I switch to the {string} user tab', async function (this: CustomWorld, ro
  * for testing the Admin Submissions review pages.
  */
 Given('the test data is reset with a pending submission', async function (this: CustomWorld) {
-  const baseURL = process.env.BASE_URL || 'https://influencerportal.com';
-  const secret = process.env.E2E_RESET_SECRET || 'e2e-test-local';
+  const baseURL = e2eBaseURL();
+  const secret = requiredEnv('E2E_RESET_SECRET');
 
   try {
     const controller = new AbortController();

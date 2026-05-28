@@ -23,9 +23,9 @@ Feature: User Registration
     And I should see the element with test id "register-login-link"
 
   Scenario: Password visibility toggle works on register
-    When I fill the field with test id "register-password-input" with "Secret123!"
+    When I fill the field with test id "register-password-input" with env var "QA_REGISTER_PASSWORD_TOGGLE_VALUE"
     And I click the element with test id "register-password-toggle"
-    Then the element with test id "register-password-input" should have value "Secret123!"
+    Then the element with test id "register-password-input" should have value from env var "QA_REGISTER_PASSWORD_TOGGLE_VALUE"
 
   Scenario: Select influencer role and see active state
     When I click the element with test id "register-role-influencer"
@@ -43,8 +43,8 @@ Feature: User Registration
   @slow
   Scenario: Attempt registration with existing email shows error toast
     When I click the element with test id "register-role-brand"
-    And I fill the field with test id "register-name-input" with "Existing User"
-    And I fill the field with test id "register-email-input" with "marka@influencerportal.com.tr"
-    And I fill the field with test id "register-password-input" with "SomePassword123!"
+    And I fill the field with test id "register-name-input" with env var "QA_REGISTER_EXISTING_NAME"
+    And I fill the field with test id "register-email-input" with env var "QA_BRAND_EMAIL"
+    And I fill the field with test id "register-password-input" with env var "QA_REGISTER_EXISTING_PASSWORD"
     And I click the element with test id "register-submit-button"
     Then I should see a toast message containing "e-posta"

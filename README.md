@@ -22,10 +22,9 @@ This framework operates completely independently from the main application codeb
    ```bash
    npx playwright install
    ```
-4. Kok dizindeki `.env` dosyasini acip test kosturmak istediginiz hedef adresi (`BASE_URL`) ve test hesap bilgilerini girin.
-   ```env
-   BASE_URL=https://influencerportal.com.tr
-   APP_LOCALE=en
+4. `.env.example` dosyasini `.env` olarak kopyalayin ve tum placeholder degerleri kendi ortam/test hesap bilgilerinizle doldurun.
+   ```bash
+   cp .env.example .env
    ```
 
 ### Testleri Çalıştırma
@@ -60,10 +59,9 @@ This framework operates completely independently from the main application codeb
    ```bash
    npx playwright install
    ```
-4. Open the root `.env` file and set your target `BASE_URL` (Staging, Pre-prod, or Production) alongside test account credentials.
-   ```env
-   BASE_URL=https://influencerportal.com.tr
-   APP_LOCALE=en
+4. Copy `.env.example` to `.env`, then replace every placeholder with your target environment and test account values.
+   ```bash
+   cp .env.example .env
    ```
 
 ### Running Tests
@@ -83,7 +81,8 @@ This framework operates completely independently from the main application codeb
 ### GitHub Actions Reports
 - Pushes and pull requests run the full Cucumber suite unless a manual workflow run provides a tag filter.
 - GitHub Actions shows a readable E2E summary directly on the workflow run page.
-- The full HTML report is uploaded as the `e2e-cucumber-report-*` artifact.
+- Pushes, scheduled runs, and manual runs publish the navigable HTML report to GitHub Pages.
+- The full HTML report is also uploaded as the `e2e-cucumber-report-*` artifact.
 - CI does not record videos. Videos are recorded only for local runs.
 
 ---

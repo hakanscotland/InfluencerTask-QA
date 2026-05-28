@@ -68,6 +68,11 @@ jobs:
             ENV_NAME="production"
           fi
 
+          if [ "$ENV_NAME" = "production" ] && [ -z "${{ secrets.BASE_URL_PROD }}" ]; then
+            echo "BASE_URL_PROD is not set."
+            exit 1
+          fi
+
           if [ -z "$TAGS" ]; then
             RUN_LABEL="Full Suite ($ENV_NAME)"
           else
@@ -104,8 +109,8 @@ jobs:
       - name: Execute full E2E test suite
         id: run_tests
         env:
-          BASE_URL: ${{ needs.setup.outputs.env_name == 'staging' && secrets.BASE_URL_STAGING || secrets.BASE_URL_PROD || 'https://influencerportal.com.tr' }}
-          APP_LOCALE: en
+          BASE_URL: ${{ needs.setup.outputs.env_name == 'staging' && secrets.BASE_URL_STAGING || secrets.BASE_URL_PROD }}
+          APP_LOCALE: ${{ vars.APP_LOCALE }}
           EMAIL: ${{ secrets.EMAIL || secrets.QA_USER_EMAIL }}
           PASSWORD: ${{ secrets.PASSWORD || secrets.QA_USER_PASSWORD }}
           QA_USER_EMAIL: ${{ secrets.QA_USER_EMAIL }}
@@ -114,6 +119,15 @@ jobs:
           QA_BRAND_PASSWORD: ${{ secrets.QA_BRAND_PASSWORD }}
           QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
           QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
+          E2E_RESET_SECRET: ${{ secrets.E2E_RESET_SECRET }}
+          QA_INVALID_EMAIL: ${{ vars.QA_INVALID_EMAIL }}
+          QA_INVALID_PASSWORD: ${{ secrets.QA_INVALID_PASSWORD }}
+          QA_EMPTY_EMAIL_PASSWORD: ${{ secrets.QA_EMPTY_EMAIL_PASSWORD }}
+          QA_EMPTY_PASSWORD_EMAIL: ${{ vars.QA_EMPTY_PASSWORD_EMAIL }}
+          QA_PASSWORD_TOGGLE_VALUE: ${{ secrets.QA_PASSWORD_TOGGLE_VALUE }}
+          QA_REGISTER_PASSWORD_TOGGLE_VALUE: ${{ secrets.QA_REGISTER_PASSWORD_TOGGLE_VALUE }}
+          QA_REGISTER_EXISTING_NAME: ${{ vars.QA_REGISTER_EXISTING_NAME }}
+          QA_REGISTER_EXISTING_PASSWORD: ${{ secrets.QA_REGISTER_EXISTING_PASSWORD }}
           TAGS: ${{ needs.setup.outputs.tags }}
           BROWSER: ${{ needs.setup.outputs.browser }}
           HEADLESS: 'true'

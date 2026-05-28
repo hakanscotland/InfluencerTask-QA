@@ -14,19 +14,19 @@ Feature: User Authentication - Login
     And the page should contain text "Welcome"
 
   Scenario: Login with invalid credentials shows error
-    When I fill the field with test id "login-email-input" with "wrong@example.com"
-    And I fill the field with test id "login-password-input" with "WrongPassword"
+    When I fill the field with test id "login-email-input" with env var "QA_INVALID_EMAIL"
+    And I fill the field with test id "login-password-input" with env var "QA_INVALID_PASSWORD"
     And I click the element with test id "login-submit-button"
     Then I should see the element with test id "login-error-message"
     And the element with test id "login-error-message" should contain text "Geçersiz"
 
   Scenario: Login with empty email shows validation error
-    When I fill the field with test id "login-password-input" with "somepassword"
+    When I fill the field with test id "login-password-input" with env var "QA_EMPTY_EMAIL_PASSWORD"
     And I click the element with test id "login-submit-button"
     Then the element with test id "login-email-input" should have value ""
 
   Scenario: Login with empty password keeps user on login page
-    When I fill the field with test id "login-email-input" with "user@example.com"
+    When I fill the field with test id "login-email-input" with env var "QA_EMPTY_PASSWORD_EMAIL"
     And I click the element with test id "login-submit-button"
     Then the element with test id "login-password-input" should have value ""
     And the URL should contain "/login"
@@ -40,9 +40,9 @@ Feature: User Authentication - Login
     And I should see the element with test id "login-register-link"
 
   Scenario: Password visibility toggle works
-    When I fill the field with test id "login-password-input" with "Secret123"
+    When I fill the field with test id "login-password-input" with env var "QA_PASSWORD_TOGGLE_VALUE"
     And I click the element with test id "login-password-toggle"
-    Then the element with test id "login-password-input" should have value "Secret123"
+    Then the element with test id "login-password-input" should have value from env var "QA_PASSWORD_TOGGLE_VALUE"
 
   Scenario: Navigate to register page from login
     When I click the element with test id "login-register-link"

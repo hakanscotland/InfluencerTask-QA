@@ -14,7 +14,7 @@ Feature: Forgot Password
     And I should see the element with test id "forgot-password-back-link"
 
   Scenario: Submit forgot password with valid email shows success
-    When I fill the field with test id "forgot-password-email-input" with "marka@influencerportal.com.tr"
+    When I fill the field with test id "forgot-password-email-input" with env var "QA_BRAND_EMAIL"
     And I click the element with test id "forgot-password-submit-button"
     Then I should see the element with test id "forgot-password-success-message"
 

@@ -1,6 +1,6 @@
 import { setWorldConstructor, World, IWorldOptions } from '@cucumber/cucumber';
 import { Browser, BrowserContext, Page, chromium } from '@playwright/test';
-import './env';
+import { optionalEnv, requiredEnv } from './env';
 
 /**
  * Custom Cucumber World with Playwright browser, context, and page.
@@ -40,13 +40,14 @@ class PlaywrightWorld extends World implements CustomWorld {
     // Headless by default. Override to headed only when HEADLESS=false explicitly.
     // CI=true always forces headless regardless of HEADLESS value.
     const isHeadless = process.env.HEADLESS !== 'false' || process.env.CI === 'true';
+    const slowMo = optionalEnv('SLOW_MO');
     this.browser = await chromium.launch({
       headless: isHeadless,
-      slowMo: process.env.SLOW_MO ? parseInt(process.env.SLOW_MO, 10) : (isHeadless ? 0 : 300),
+      slowMo: slowMo ? parseInt(slowMo, 10) : (isHeadless ? 0 : 300),
     });
     this.context = await this.browser.newContext({
       // BASE_URL → workflow'dan gelen env variable (TEST_BASE_URL eski isimdi, kaldırıldı)
-      baseURL: process.env.BASE_URL || 'https://influencerportal.com',
+      baseURL: requiredEnv('BASE_URL'),
       viewport: { width: 1280, height: 720 },
       recordVideo: process.env.CI === 'true' ? undefined : { dir: 'e2e/reports/videos/' },
     });
