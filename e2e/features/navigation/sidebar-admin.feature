@@ -5,7 +5,8 @@ Feature: Admin Sidebar Navigation
   So that I can manage the platform efficiently
 
   Background:
-    Given I am logged in as an "admin" user
+    Given the system setting "feature_subscription_enabled" is set to "true"
+    And I am logged in as an "admin" user
 
   Scenario: Admin sidebar navigation links
     Then I should see the element with test id "sidebar-nav-link-admin"

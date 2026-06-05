@@ -540,3 +540,25 @@ Given('the test data is reset with a pending submission', async function (this: 
     console.warn(`⚠️  E2E reset (with seed) error (non-fatal): ${err.message}`);
   }
 });
+
+Given('the system setting {string} is set to {string}', async function (this: CustomWorld, key: string, value: string) {
+  const baseURL = e2eBaseURL();
+  const secret = requiredEnv('E2E_RESET_SECRET');
+
+  try {
+    const res = await fetch(`${baseURL}/api/e2e-reset?only_settings=true&setting_key=${key}&setting_value=${value}`, {
+      method: 'POST',
+      headers: {
+        'X-E2E-Secret': secret,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`Failed to update system setting ${key} via API (${res.status}): ${body}`);
+    }
+  } catch (err: any) {
+    throw new Error(`Error setting system setting ${key}: ${err.message}`);
+  }
+});

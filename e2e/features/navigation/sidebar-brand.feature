@@ -5,7 +5,9 @@ Feature: Sidebar Navigation
   So that I can access all features quickly
 
   Background:
-    Given I am logged in as a "brand" user
+    Given the system setting "feature_subscription_enabled" is set to "true"
+    And the system setting "feature_web3_enabled" is set to "true"
+    And I am logged in as a "brand" user
 
   Scenario: Sidebar is visible on desktop
     Then I should see the element with test id "sidebar"

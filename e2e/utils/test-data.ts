@@ -65,7 +65,7 @@ export interface ResetResult {
  * Deletes submissions, wallet transactions, payments, withdrawal requests,
  * and resets application statuses and wallet balances.
  */
-export async function resetTestData(): Promise<ResetResult> {
+export async function resetTestData(enableFeatures: string[] = []): Promise<ResetResult> {
   // 1. Look up test influencer
   const { data: user, error: userErr } = await supabase
     .from("users")
@@ -181,12 +181,12 @@ export async function resetTestData(): Promise<ResetResult> {
       }
     }
 
-    // Ensure core features are enabled
+    // Ensure core features are set correctly (defaulting to false)
     const settingsToUpsert = [
-      { key: "feature_web3_enabled", value: true },
-      { key: "feature_subscription_enabled", value: true },
-      { key: "feature_trending_enabled", value: true },
-      { key: "feature_team_enabled", value: true },
+      { key: "feature_web3_enabled", value: enableFeatures.includes("feature_web3_enabled") },
+      { key: "feature_subscription_enabled", value: enableFeatures.includes("feature_subscription_enabled") },
+      { key: "feature_trending_enabled", value: enableFeatures.includes("feature_trending_enabled") },
+      { key: "feature_team_enabled", value: enableFeatures.includes("feature_team_enabled") },
     ];
 
     for (const setting of settingsToUpsert) {
@@ -308,9 +308,9 @@ export async function resetTestData(): Promise<ResetResult> {
 /**
  * Seeds a manual_review submission for admin review tests.
  */
-export async function seedTestData(): Promise<ResetResult> {
+export async function seedTestData(enableFeatures: string[] = []): Promise<ResetResult> {
   // First reset
-  const resetResult = await resetTestData();
+  const resetResult = await resetTestData(enableFeatures);
 
   // Look up influencer
   const { data: user } = await supabase
