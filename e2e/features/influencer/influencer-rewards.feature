@@ -10,11 +10,10 @@ Feature: Influencer Rewards
 
   Scenario: Rewards page loads
     Then the URL should contain "/influencer/rewards"
-    And the page should contain text "rewards"
+    And the page should contain text "Rewards"
 
   Scenario: Rewards empty state is visible
-    Then the page should contain text "Dashboard.influencer.rewards.empty.title"
-    And the page should contain text "Dashboard.influencer.rewards.empty.desc"
+    Then the page should contain text "No rewards yet"
 
   @mobile
   Scenario: Rewards page on mobile

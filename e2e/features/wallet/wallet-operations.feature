@@ -5,7 +5,8 @@ Feature: Wallet Operations
   So that I can manage earnings without accidentally submitting live requests
 
   Background:
-    Given I am logged in as an "influencer" user
+    Given the system setting "feature_web3_enabled" is set to "true"
+    And I am logged in as an "influencer" user
     And I navigate to the "wallet" page
 
   Scenario: Wallet page shows balance and transaction history

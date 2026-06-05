@@ -5,7 +5,8 @@ Feature: Pricing
   So that I can choose the right plan for my account
 
   Background:
-    Given I am logged in as an "influencer" user
+    Given the system setting "feature_subscription_enabled" is set to "true"
+    And I am logged in as an "influencer" user
     And I navigate to the "pricing" page
 
   Scenario: Pricing page loads

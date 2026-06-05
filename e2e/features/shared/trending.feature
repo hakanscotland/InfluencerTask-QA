@@ -5,7 +5,8 @@ Feature: Trending Influencers
   So that I can discover high-growth accounts
 
   Background:
-    Given I am logged in as an "influencer" user
+    Given the system setting "feature_trending_enabled" is set to "true"
+    And I am logged in as an "influencer" user
     And I navigate to the "trending" page
 
   Scenario: Trending page loads

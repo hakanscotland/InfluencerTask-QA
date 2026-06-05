@@ -5,7 +5,8 @@ Feature: Subscription Management
   So that I understand my current billing status
 
   Background:
-    Given I am logged in as an "influencer" user
+    Given the system setting "feature_subscription_enabled" is set to "true"
+    And I am logged in as an "influencer" user
     And I navigate to the "settings subscription" page
 
   Scenario: Subscription page loads
