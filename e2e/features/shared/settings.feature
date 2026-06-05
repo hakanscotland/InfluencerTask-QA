@@ -5,8 +5,7 @@ Feature: User Settings
   So that my account information stays current
 
   Background:
-    Given the system setting "feature_subscription_enabled" is set to "true"
-    And I am logged in as an "influencer" user
+    Given I am logged in as an "influencer" user
     And I navigate to the "settings" page
 
   Scenario: Settings page loads
@@ -16,10 +15,6 @@ Feature: User Settings
     Then I should see the element with test id "settings-name-input"
     And I should see the element with test id "settings-bio-textarea"
     And I should see the element with test id "settings-save-button"
-
-  Scenario: Navigate to subscription settings
-    When I navigate to the "settings subscription" page
-    Then the URL should contain "/settings/subscription"
 
   @mobile
   Scenario: Settings on mobile

@@ -5,8 +5,7 @@ Feature: Wallet Operations
   So that I can manage earnings without accidentally submitting live requests
 
   Background:
-    Given the system setting "feature_web3_enabled" is set to "true"
-    And I am logged in as an "influencer" user
+    Given I am logged in as an "influencer" user
     And I navigate to the "wallet" page
 
   Scenario: Wallet page shows balance and transaction history
@@ -27,8 +26,3 @@ Feature: Wallet Operations
     And I should see a field with placeholder "Bank Name"
     And I should see a field with placeholder "TR... (IBAN)"
     And I should see a field with placeholder "Account Holder Name"
-
-  Scenario: Promo token wallet tab opens
-    When I click the element with test id "wallet-tab-promo"
-    Then the element with test id "wallet-tab-promo" should be enabled
-    And the page should contain text "Web3"

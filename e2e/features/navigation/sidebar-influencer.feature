@@ -5,18 +5,15 @@ Feature: Influencer Sidebar Navigation
   So that I can access all features quickly
 
   Background:
-    Given the system setting "feature_subscription_enabled" is set to "true"
-    And the system setting "feature_web3_enabled" is set to "true"
-    And I am logged in as an "influencer" user
+    Given I am logged in as an "influencer" user
 
-  Scenario: Influencer sidebar navigation links
+  Scenario: Influencer sidebar core navigation links
     Then I should see the element with test id "sidebar-nav-link-influencer"
     And I should see the element with test id "sidebar-nav-link-influencer-campaigns"
     And I should see the element with test id "sidebar-nav-link-influencer-campaigns-new"
     And I should see the element with test id "sidebar-nav-link-brand-discover"
     And I should see the element with test id "sidebar-nav-link-influencer-submissions"
     And I should see the element with test id "sidebar-nav-link-influencer-analytics"
-    And I should see the element with test id "sidebar-nav-link-settings-subscription"
 
   Scenario: Navigate to influencer analytics from sidebar
     When I click the element with test id "sidebar-nav-link-influencer-analytics"

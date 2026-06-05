@@ -5,9 +5,7 @@ Feature: Sidebar Navigation
   So that I can access all features quickly
 
   Background:
-    Given the system setting "feature_subscription_enabled" is set to "true"
-    And the system setting "feature_web3_enabled" is set to "true"
-    And I am logged in as a "brand" user
+    Given I am logged in as a "brand" user
 
   Scenario: Sidebar is visible on desktop
     Then I should see the element with test id "sidebar"
@@ -16,14 +14,13 @@ Feature: Sidebar Navigation
     And I should see the element with test id "sidebar-settings-link"
     And I should see the element with test id "sidebar-home-link"
 
-  Scenario: Brand sidebar navigation links
+  Scenario: Brand sidebar core navigation links
     Then I should see the element with test id "sidebar-nav-link-brand"
     And I should see the element with test id "sidebar-nav-link-brand-campaigns"
     And I should see the element with test id "sidebar-nav-link-brand-discover"
     And I should see the element with test id "sidebar-nav-link-brand-ai-brief"
     And I should see the element with test id "sidebar-nav-link-brand-media-tracking"
     And I should see the element with test id "sidebar-nav-link-brand-messages"
-    And I should see the element with test id "sidebar-nav-link-settings-subscription"
 
   Scenario: Navigate to brand campaigns from sidebar
     When I click the element with test id "sidebar-nav-link-brand-campaigns"

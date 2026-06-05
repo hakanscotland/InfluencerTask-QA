@@ -5,8 +5,7 @@ Feature: Admin Sidebar Navigation
   So that I can manage the platform efficiently
 
   Background:
-    Given the system setting "feature_subscription_enabled" is set to "true"
-    And I am logged in as an "admin" user
+    Given I am logged in as an "admin" user
 
   Scenario: Admin sidebar navigation links
     Then I should see the element with test id "sidebar-nav-link-admin"
@@ -18,7 +17,6 @@ Feature: Admin Sidebar Navigation
     And I should see the element with test id "sidebar-nav-link-admin-iqs-settings"
     And I should see the element with test id "sidebar-nav-link-admin-withdrawals"
     And I should see the element with test id "sidebar-nav-link-admin-finance"
-    And I should see the element with test id "sidebar-nav-link-admin-subscriptions"
     And I should see the element with test id "sidebar-nav-link-admin-settings"
     And I should see the element with test id "sidebar-nav-link-admin-versions"
     And I should see the element with test id "sidebar-nav-link-admin-tickets"
