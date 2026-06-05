@@ -68,6 +68,10 @@ const roleCredentialEnv: Record<string, { email: string; password: string }> = {
   brand: { email: 'QA_BRAND_EMAIL', password: 'QA_BRAND_PASSWORD' },
   influencer: { email: 'QA_USER_EMAIL', password: 'QA_USER_PASSWORD' },
   admin: { email: 'QA_ADMIN_EMAIL', password: 'QA_ADMIN_PASSWORD' },
+  'campaign-admin': { email: 'QA_CAMPAIGN_ADMIN_EMAIL', password: 'QA_CAMPAIGN_ADMIN_PASSWORD' },
+  'campaign admin': { email: 'QA_CAMPAIGN_ADMIN_EMAIL', password: 'QA_CAMPAIGN_ADMIN_PASSWORD' },
+  'superadmin': { email: 'QA_ADMIN_EMAIL', password: 'QA_ADMIN_PASSWORD' },
+  'super admin': { email: 'QA_ADMIN_EMAIL', password: 'QA_ADMIN_PASSWORD' },
 };
 
 function credentialsForRole(role: string) {
