@@ -120,14 +120,14 @@ jobs:
           QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
           QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
           E2E_RESET_SECRET: ${{ secrets.E2E_RESET_SECRET }}
-          QA_INVALID_EMAIL: ${{ vars.QA_INVALID_EMAIL }}
-          QA_INVALID_PASSWORD: ${{ secrets.QA_INVALID_PASSWORD }}
-          QA_EMPTY_EMAIL_PASSWORD: ${{ secrets.QA_EMPTY_EMAIL_PASSWORD }}
-          QA_EMPTY_PASSWORD_EMAIL: ${{ vars.QA_EMPTY_PASSWORD_EMAIL }}
-          QA_PASSWORD_TOGGLE_VALUE: ${{ secrets.QA_PASSWORD_TOGGLE_VALUE }}
-          QA_REGISTER_PASSWORD_TOGGLE_VALUE: ${{ secrets.QA_REGISTER_PASSWORD_TOGGLE_VALUE }}
-          QA_REGISTER_EXISTING_NAME: ${{ vars.QA_REGISTER_EXISTING_NAME }}
-          QA_REGISTER_EXISTING_PASSWORD: ${{ secrets.QA_REGISTER_EXISTING_PASSWORD }}
+          QA_INVALID_EMAIL: ${{ vars.QA_INVALID_EMAIL || 'invalid@invalid-domain-e2e.test' }}
+          QA_INVALID_PASSWORD: ${{ secrets.QA_INVALID_PASSWORD || 'WrongPassword999!' }}
+          QA_EMPTY_EMAIL_PASSWORD: ${{ secrets.QA_EMPTY_EMAIL_PASSWORD || 'AnyPassword123!' }}
+          QA_EMPTY_PASSWORD_EMAIL: ${{ vars.QA_EMPTY_PASSWORD_EMAIL || 'someuser@example.com' }}
+          QA_PASSWORD_TOGGLE_VALUE: ${{ secrets.QA_PASSWORD_TOGGLE_VALUE || 'TestToggle123!' }}
+          QA_REGISTER_PASSWORD_TOGGLE_VALUE: ${{ secrets.QA_REGISTER_PASSWORD_TOGGLE_VALUE || 'RegisterToggle123!' }}
+          QA_REGISTER_EXISTING_NAME: ${{ vars.QA_REGISTER_EXISTING_NAME || 'qa_influencer' }}
+          QA_REGISTER_EXISTING_PASSWORD: ${{ secrets.QA_REGISTER_EXISTING_PASSWORD || 'WrongPass999!' }}
           TAGS: ${{ needs.setup.outputs.tags }}
           BROWSER: ${{ needs.setup.outputs.browser }}
           HEADLESS: 'true'

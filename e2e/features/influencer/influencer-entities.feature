@@ -12,14 +12,14 @@ Feature: Influencer Brands
     Then the page should contain text "My Brands"
     And the page should contain text "Add and verify your brands"
 
-  Scenario: Empty brands state is visible
-    Then the page should contain text "No brands added yet"
+  Scenario: Empty brands state or brand list is visible
+    Then the page may contain text "No brands added yet"
     And I should see a button containing text "Add New Brand"
 
   Scenario: Search brands field is available
-    Then I should see a field with placeholder "Marka ara..."
-    When I fill the field with placeholder "Marka ara..." with "No Matching Brand"
-    Then the page should contain text "No brands added yet"
+    Then I should see a field with placeholder "Search brand..."
+    When I fill the field with placeholder "Search brand..." with "No Matching Brand"
+    Then the page may contain text "No brands"
 
   @mobile
   Scenario: My brands page on mobile

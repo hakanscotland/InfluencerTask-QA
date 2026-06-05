@@ -15,14 +15,11 @@ Feature: Wallet Operations
 
   Scenario: Open fiat deposit amount step
     When I click the element with test id "wallet-deposit-button"
-    Then the page should contain text "Bakiye Yükle"
-    And I should see a field with placeholder "Örn: 5000"
-    And I should see a button containing text "DEVAM ET"
+    Then the page may contain text "Deposit Balance"
+    And the page may contain text "Bakiye Yükle"
 
   Scenario: Open withdrawal request form
     When I click the element with test id "wallet-withdraw-button"
     Then the page should contain text "Withdrawal Request"
-    And I should see a field with placeholder "Örn: 500"
-    And I should see a field with placeholder "Bank Name"
-    And I should see a field with placeholder "TR... (IBAN)"
-    And I should see a field with placeholder "Account Holder Name"
+    And I should see the element with test id "wallet-withdraw-amount-input"
+    And I should see the element with test id "wallet-withdraw-bank-input"

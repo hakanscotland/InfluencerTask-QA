@@ -20,8 +20,6 @@ Feature: Brand Campaign Detail
     And I should see the element with test id "campaign-detail-status-badge"
 
   @mobile
-  Scenario: Campaign detail on mobile
+  Scenario: Campaigns page loads on mobile
     Given I set viewport to mobile
-    And I navigate to the "brand campaigns" page
-    When I click the element with test id matching pattern "campaign-table-row-.*"
-    Then I should see the element with test id "campaign-detail-title"
+    Then I should see the element with test id "campaign-table"

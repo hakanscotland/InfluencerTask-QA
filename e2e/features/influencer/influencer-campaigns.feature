@@ -16,9 +16,10 @@ Feature: Influencer My Campaigns
     And I should see the element with test id "influencer-campaigns-tab-opportunities"
     And I should see the element with test id "influencer-campaigns-tab-created"
 
-  Scenario: Empty participations state is visible
-    Then I should see the element with test id "campaign-table-empty-state"
-    And the page should contain text "No participations yet"
+  Scenario: Applications tab panel loads
+    Then I should see the element with test id "influencer-campaigns-tab-applications"
+    When I click the element with test id "influencer-campaigns-tab-applications"
+    Then I should see the element with test id "influencer-campaigns-tab-panel-applications"
 
   Scenario: New opportunities tab shows campaign cards
     When I click the element with test id "influencer-campaigns-tab-opportunities"

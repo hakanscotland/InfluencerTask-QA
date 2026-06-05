@@ -8,6 +8,7 @@ Feature: Influencer Task Submission
     Given the test data is reset for influencer user
     And I am logged in as an "influencer" user
     And I navigate to the "influencer campaigns" page
+    And I click the element with test id "influencer-campaigns-tab-applications"
 
   Scenario: Open task checklist from campaign
     When I click the element with test id matching pattern "influencer-campaign-card-apply-button"

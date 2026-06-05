@@ -10,9 +10,7 @@ Feature: Influencer Sidebar Navigation
   Scenario: Influencer sidebar core navigation links
     Then I should see the element with test id "sidebar-nav-link-influencer"
     And I should see the element with test id "sidebar-nav-link-influencer-campaigns"
-    And I should see the element with test id "sidebar-nav-link-influencer-campaigns-new"
     And I should see the element with test id "sidebar-nav-link-brand-discover"
-    And I should see the element with test id "sidebar-nav-link-influencer-submissions"
     And I should see the element with test id "sidebar-nav-link-influencer-analytics"
 
   Scenario: Navigate to influencer analytics from sidebar

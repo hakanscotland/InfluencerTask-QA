@@ -272,10 +272,22 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
   await this.page.getByTestId('login-submit-button').click();
 
   // Wait for redirect to dashboard (using pathname function to avoid domain name conflicts)
-  await this.page.waitForURL(url => {
-    const p = url.pathname;
-    return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
-  }, { timeout: 60000 });
+  try {
+    await this.page.waitForURL(url => {
+      const p = url.pathname;
+      return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+    }, { timeout: 60000 });
+  } catch {
+    // Check if we're still on login page (login failed)
+    const currentUrl = this.page.url();
+    if (currentUrl.includes('/login')) {
+      // Try to capture the error message
+      const errorEl = this.page.getByTestId('login-error-message');
+      const errorText = await errorEl.textContent().catch(() => 'No error message found');
+      throw new Error(`Login failed for role "${role}". Still on /login page. Error: ${errorText}`);
+    }
+    throw new Error(`Login redirect timeout for role "${role}". Current URL: ${currentUrl}`);
+  }
 });
 
 Given('I am logged out', async function (this: CustomWorld) {
@@ -500,10 +512,20 @@ Given('I switch to the {string} user tab', async function (this: CustomWorld, ro
   await this.page.getByTestId('login-email-input').fill(user.email);
   await this.page.getByTestId('login-password-input').fill(user.password);
   await this.page.getByTestId('login-submit-button').click();
-  await this.page.waitForURL(url => {
-    const p = url.pathname;
-    return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
-  }, { timeout: 10000 });
+  try {
+    await this.page.waitForURL(url => {
+      const p = url.pathname;
+      return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+    }, { timeout: 10000 });
+  } catch {
+    const currentUrl = this.page.url();
+    if (currentUrl.includes('/login')) {
+      const errorEl = this.page.getByTestId('login-error-message');
+      const errorText = await errorEl.textContent().catch(() => 'No error message found');
+      throw new Error(`Switch user failed for role "${role}". Still on /login page. Error: ${errorText}`);
+    }
+    throw new Error(`Switch user redirect timeout for role "${role}". Current URL: ${currentUrl}`);
+  }
 });
 
 /**
