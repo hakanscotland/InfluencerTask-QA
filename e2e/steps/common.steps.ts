@@ -331,7 +331,10 @@ Given('the test data is reset for influencer user', async function (this: Custom
       console.warn(`⚠️  E2E reset returned ${res.status}: ${body}`);
     } else {
       const data = await res.json();
-      console.log(`🔄 E2E reset: ${data.message} (${data.submissionsDeleted} submissions deleted)`);
+      console.log(`🔄 E2E reset: ${data.message} (${data.submissionsDeleted} submissions deleted, seeded: ${data.seeded})`);
+      if (data.debug) {
+        console.log(`🔍 E2E reset debug: influencerId=${data.debug.influencerId}, brandId=${data.debug.brandId}, brandFound=${data.debug.brandFound}`);
+      }
     }
   } catch (err: any) {
     // Non-fatal — if the server is slow or reset fails, let the test continue
