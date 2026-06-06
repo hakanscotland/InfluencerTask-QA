@@ -161,6 +161,16 @@ When('I click the element with test id matching pattern {string}', async functio
   await element.first().click({ force: true });
 });
 
+When('I click the element with test id matching pattern {string} if it exists', async function (this: CustomWorld, pattern: string) {
+  const element = this.page.getByTestId(new RegExp(pattern));
+  const count = await element.count();
+  if (count > 0 && await element.first().isVisible().catch(() => false)) {
+    await element.first().click({ force: true });
+  } else {
+    console.log(`ℹ️  No elements matching pattern "${pattern}" found — skipping click`);
+  }
+});
+
 When('I click the first link containing href {string}', async function (this: CustomWorld, hrefPart: string) {
   const link = this.page.locator(`a[href*="${hrefPart}"]`).first();
   await expect(link).toBeVisible();
