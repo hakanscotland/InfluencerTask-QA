@@ -19,6 +19,7 @@ Feature: Influencer My Campaigns
   Scenario: Applications tab panel loads
     Then I should see the element with test id "influencer-campaigns-tab-applications"
     When I click the element with test id "influencer-campaigns-tab-applications"
+    And I wait for the page to load
     Then I should see the element with test id "influencer-campaigns-tab-panel-applications"
 
   Scenario: New opportunities tab shows campaign cards

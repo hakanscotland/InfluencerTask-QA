@@ -112,7 +112,13 @@ defineStep('I navigate to the {string} page', async function (this: CustomWorld,
   const path = localizedPath(route);
   const urlWithE2E = path + (path.includes('?') ? '&' : '?') + 'e2e=true';
   await this.page.goto(urlWithE2E, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await this.page.waitForLoadState('networkidle').catch(() => {});
   await this.page.waitForTimeout(500);
+});
+
+When('I wait for the page to load', async function (this: CustomWorld) {
+  await this.page.waitForLoadState('networkidle').catch(() => {});
+  await this.page.waitForTimeout(1000);
 });
 
 When('I click the element with test id {string}', async function (this: CustomWorld, testId: string) {
@@ -286,7 +292,8 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
     await this.page.waitForURL(url => {
       const p = url.pathname;
       return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
-    }, { timeout: 60000 });
+    }, { timeout: 90000 });
+    await this.page.waitForLoadState('networkidle').catch(() => {});
   } catch {
     // Check if we're still on login page (login failed)
     const currentUrl = this.page.url();

@@ -51,5 +51,6 @@ Feature: Campaign Creation
     And I click the element with test id "campaign-wizard-next-button"
     # Step 4: Review & Submit
     And I click the element with test id "campaign-wizard-submit-button"
+    And I wait for the page to load
     Then I should see the element with test id "campaign-table"
     And the element with test id "campaign-table" should contain text "E2E Test Campaign"
