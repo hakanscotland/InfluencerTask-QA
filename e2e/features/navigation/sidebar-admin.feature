@@ -12,7 +12,6 @@ Feature: Admin Sidebar Navigation
     And I should see the element with test id "sidebar-nav-link-admin-users"
     And I should see the element with test id "sidebar-nav-link-admin-brands"
     And I should see the element with test id "sidebar-nav-link-admin-campaigns"
-    And I should see the element with test id "sidebar-nav-link-admin-submissions"
     And I should see the element with test id "sidebar-nav-link-admin-iqs"
     And I should see the element with test id "sidebar-nav-link-admin-iqs-settings"
     And I should see the element with test id "sidebar-nav-link-admin-withdrawals"

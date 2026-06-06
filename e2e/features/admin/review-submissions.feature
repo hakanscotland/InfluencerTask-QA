@@ -14,7 +14,7 @@ Feature: Admin Submission Review
     And I should see the element with test id "admin-submissions-table"
 
   Scenario: Filter submissions by status
-    When I select "pending" from the dropdown with test id "admin-submissions-filter-status"
+    When I click the button containing text "manual_review"
     Then I should see the element with test id "admin-submissions-table"
 
   Scenario: Approve a submission
