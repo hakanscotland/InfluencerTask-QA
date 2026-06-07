@@ -278,32 +278,42 @@ Then('I should see an error message containing {string}', async function (this: 
 
 defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: CustomWorld, role: string) {
   const user = credentialsForRole(role);
+  let attempts = 0;
+  const maxAttempts = 3;
 
-  await this.page.goto(localizedPath('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await this.page.waitForTimeout(500);
+  while (attempts < maxAttempts) {
+    attempts++;
+    try {
+      await this.page.goto(localizedPath('/login'), { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await this.page.waitForTimeout(1000);
 
-  // Fill login form using test IDs
-  await this.page.getByTestId('login-email-input').fill(user.email);
-  await this.page.getByTestId('login-password-input').fill(user.password);
-  await this.page.getByTestId('login-submit-button').click();
+      // Fill login form using test IDs
+      await this.page.getByTestId('login-email-input').fill(user.email);
+      await this.page.getByTestId('login-password-input').fill(user.password);
+      await this.page.getByTestId('login-submit-button').click();
 
-  // Wait for redirect to dashboard (using pathname function to avoid domain name conflicts)
-  try {
-    await this.page.waitForURL(url => {
-      const p = url.pathname;
-      return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
-    }, { timeout: 90000 });
-    await this.page.waitForLoadState('networkidle').catch(() => {});
-  } catch {
-    // Check if we're still on login page (login failed)
-    const currentUrl = this.page.url();
-    if (currentUrl.includes('/login')) {
-      // Try to capture the error message
-      const errorEl = this.page.getByTestId('login-error-message');
-      const errorText = await errorEl.textContent().catch(() => 'No error message found');
-      throw new Error(`Login failed for role "${role}". Still on /login page. Error: ${errorText}`);
+      // Wait for redirect to dashboard
+      await this.page.waitForURL(url => {
+        const p = url.pathname;
+        return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
+      }, { timeout: 15000 });
+      
+      await this.page.waitForLoadState('networkidle').catch(() => {});
+      return; // Success!
+    } catch (err: any) {
+      if (attempts >= maxAttempts) {
+        // Check if we're still on login page (login failed)
+        const currentUrl = this.page.url();
+        if (currentUrl.includes('/login')) {
+          const errorEl = this.page.getByTestId('login-error-message');
+          const errorText = await errorEl.textContent().catch(() => 'No error message found');
+          throw new Error(`Login failed for role "${role}" after ${maxAttempts} attempts. Still on /login page. Error: ${errorText}`);
+        }
+        throw new Error(`Login redirect timeout for role "${role}" after ${maxAttempts} attempts. Current URL: ${this.page.url()}. Error: ${err.message}`);
+      }
+      console.warn(`⚠️ Login attempt ${attempts} failed for role "${role}". Retrying in 2s...`);
+      await this.page.waitForTimeout(2000);
     }
-    throw new Error(`Login redirect timeout for role "${role}". Current URL: ${currentUrl}`);
   }
 });
 
