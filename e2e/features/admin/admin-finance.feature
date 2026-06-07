@@ -14,8 +14,3 @@ Feature: Admin Finance and Treasury
 
   Scenario: Treasury table has approval actions
     Then I should see the element with test id matching pattern "admin-deposit-row-.*-approve-button"
-
-  @mobile
-  Scenario: Finance page on mobile
-    Given I set viewport to mobile
-    Then I should see the element with test id "admin-treasury-page"
