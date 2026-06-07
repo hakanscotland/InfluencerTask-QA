@@ -6,6 +6,18 @@ This framework operates completely independently from the main application codeb
 
 ---
 
+## 📋 Test Mimarisi ve Sorumluluk Dağılımı
+
+| Ortam | Konum | Amaç | Çalıştırma |
+|-------|-------|------|------------|
+| **QA Repo** (bu repo) | `qa-test-repository/e2e/` | CI/CD E2E testleri — production'a karşı çalışır | GitHub Actions (otomatik) |
+| **Main Project** | `InfluencerPortal/e2e/` | Local geliştirme testleri — developer makinesinde çalışır | Manuel (`npm run e2e:local`) |
+
+- **QA Repo**: 35 feature dosyası, tüm senaryoları kapsar. GitHub Actions ile her push'ta otomatik çalışır.
+- **Main E2E**: 31 feature dosyası, temel senaryoları kapsar. Geliştiriciler local olarak çalıştırır.
+
+---
+
 ## 🇹🇷 Türkçe Kurulum & Kullanım Kılavuzu
 
 ### Gereksinimler
