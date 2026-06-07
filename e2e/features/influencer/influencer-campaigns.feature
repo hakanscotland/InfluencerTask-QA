@@ -29,6 +29,7 @@ Feature: Influencer My Campaigns
 
   Scenario: Created campaigns tab has a create campaign entry point
     When I click the element with test id "influencer-campaigns-tab-created"
+    And I wait for the page to load
     Then I should see the element with test id "influencer-campaigns-tab-panel-created"
     And the page should contain text "Create Campaign"
 

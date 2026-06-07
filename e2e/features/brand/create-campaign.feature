@@ -48,11 +48,11 @@ Feature: Campaign Creation
     And I select "Story Share" from the dropdown with test id "task-builder-task-type-select-0"
     And I fill the field with test id "task-builder-reward-input-0" with "50"
     And I click the element with test id "campaign-wizard-next-button"
-    # Step 3: Targeting — verify we reached this step
-    Then the page may contain text "target"
+    # Step 3: Details/Targeting
     And I click the element with test id "campaign-wizard-next-button"
-    # Step 4: Review & Submit — verify we reached review
-    Then the page may contain text "review"
+    # Step 4: Another step before review
+    And I click the element with test id "campaign-wizard-next-button"
+    # Step 5: Review & Submit — submit button appears here
     And I click the element with test id "campaign-wizard-submit-button"
     And I wait for the page to load
     Then I should see the element with test id "campaign-table"
