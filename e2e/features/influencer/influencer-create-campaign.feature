@@ -1,3 +1,8 @@
+# Influencer Kampanya Oluşturma Testleri
+# Bu test dosyası, influencer kullanıcısının kendi dashboard'undan
+# kampanya başlatabildiğini ve kampanya oluşturma formunu
+# kullanabildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @campaigns
 Feature: Influencer Campaign Creation
   As an influencer user

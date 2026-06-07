@@ -1,3 +1,8 @@
+# Influencer Panel Genel Bakış Testleri
+# Bu test dosyası, influencer kullanıcısının dashboard genel bakış
+# sayfasını görüntüleyebildiğini, temel istatistikleri ve davetleri
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @overview
 Feature: Influencer Dashboard Overview
   As an influencer user

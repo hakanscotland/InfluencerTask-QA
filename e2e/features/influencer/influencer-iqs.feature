@@ -1,3 +1,8 @@
+# Influencer Kalite Puanı Testleri
+# Bu test dosyası, influencer kullanıcısının kalite puanını
+# görüntüleyebildiğini ve puan detaylarını görebildiğini
+# doğrular. Mobil uyumluluk dahildir.
+
 @influencer @iqs
 Feature: Influencer Quality Score
   As an influencer user

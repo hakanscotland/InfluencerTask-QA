@@ -1,3 +1,8 @@
+# Marka Kampanya Detay Testleri
+# Bu test dosyası, marka kullanıcısının kampanya detay sayfasına
+# gidebildiğini, detay başlığını ve durum etiketini
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @brand @campaign-detail
 Feature: Brand Campaign Detail
   As a brand user

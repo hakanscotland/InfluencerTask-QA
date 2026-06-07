@@ -1,3 +1,8 @@
+# Influencer Sosyal Medya Hesap Testleri
+# Bu test dosyası, influencer kullanıcısının bağlı sosyal medya
+# hesaplarını görüntüleyebildiğini ve yeni hesap
+# bağlayabildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @social
 Feature: Influencer Social Accounts
   As an influencer user

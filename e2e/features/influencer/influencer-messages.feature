@@ -1,3 +1,8 @@
+# Influencer Mesaj Testleri
+# Bu test dosyası, influencer kullanıcısının mesaj sayfasını
+# görüntüleyebildiğini, konuşma listesini ve sohbet penceresini
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @messages
 Feature: Influencer Messages
   As an influencer user

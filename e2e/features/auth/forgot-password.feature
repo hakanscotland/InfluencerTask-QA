@@ -1,3 +1,8 @@
+# Şifre Sıfırlama İsteği Testleri
+# Bu test dosyası, kullanıcıların şifre sıfırlama sayfasını
+# görüntüleyebildiğini, e-posta ile sıfırlama talebi gönderebildiğini
+# ve giriş sayfasına geri dönebildiğini doğrular.
+
 @auth @forgot-password
 Feature: Forgot Password
   As a registered user

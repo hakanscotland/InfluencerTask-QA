@@ -1,3 +1,8 @@
+# Influencer Davet Testleri
+# Bu test dosyası, influencer kullanıcısının doğrudan kampanya
+# davetlerini görüntüleyebildiğini ve marka davetlerine
+# yanıt verebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @invitations
 Feature: Influencer Invitations
   As an influencer user

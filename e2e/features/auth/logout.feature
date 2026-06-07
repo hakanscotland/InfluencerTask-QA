@@ -1,3 +1,8 @@
+# Kullanıcı Çıkış Testleri
+# Bu test dosyası, brand, influencer ve admin kullanıcılarının
+# sidebar'dan çıkış yapabildiğini ve oturumun güvenli şekilde
+# sonlandırıldığını doğrular.
+
 @auth @logout
 Feature: User Logout
   As a logged-in user

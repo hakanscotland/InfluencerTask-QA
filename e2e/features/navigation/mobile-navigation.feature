@@ -1,3 +1,8 @@
+# Mobil Navigasyon Testleri
+# Bu test dosyası, mobil kullanıcıların hamburger menüsünü
+# açabildiğini, tüm temel sayfalara gidebildiğini ve
+# mobil menünün doğru çalıştığını doğrular.
+
 @navigation @mobile
 Feature: Mobile Navigation
   As a mobile user

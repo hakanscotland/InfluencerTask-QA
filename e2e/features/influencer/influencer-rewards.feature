@@ -1,3 +1,8 @@
+# Influencer Ödül Testleri
+# Bu test dosyası, influencer kullanıcısının ödül durumunu
+# görüntüleyebildiğini ve sadakat/referans avantajlarını
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @rewards
 Feature: Influencer Rewards
   As an influencer user

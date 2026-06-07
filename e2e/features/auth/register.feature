@@ -1,3 +1,8 @@
+# Kullanıcı Kayıt Testleri
+# Bu test dosyası, yeni kullanıcıların kayıt formunu görüntüleyebildiğini,
+# rol seçimi yapabildiğini, form alanlarının doğru çalıştığını,
+# mevcut e-posta ile kayıt denemesinde hata gösterildiğini doğrular.
+
 @auth @register
 Feature: User Registration
   As a new user

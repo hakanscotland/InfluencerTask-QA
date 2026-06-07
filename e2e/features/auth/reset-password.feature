@@ -1,3 +1,8 @@
+# Şifre Sıfırlama Testleri
+# Bu test dosyası, sıfırlama token'ı olmadan şifre sıfırlama
+# sayfasının engellendiğini ve gerekli form alanlarının
+# görüntülendiğini doğrular.
+
 @auth @reset-password
 Feature: Reset Password
   As a user with a reset token

@@ -1,3 +1,8 @@
+# Admin Sidebar Navigasyon Testleri
+# Bu test dosyası, admin kullanıcısının sidebar üzerinden
+# tüm admin panel bölümlerine (kullanıcılar, markalar, kampanyalar,
+# finans, ayarlar vb.) gidebildiğini doğrular.
+
 @navigation @sidebar
 Feature: Admin Sidebar Navigation
   As an admin user

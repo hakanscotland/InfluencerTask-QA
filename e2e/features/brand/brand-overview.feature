@@ -1,3 +1,8 @@
+# Marka Panel Genel Bakış Testleri
+# Bu test dosyası, marka kullanıcısının dashboard genel bakış
+# sayfasını görüntüleyebildiğini, kampanya özetini görebildiğini
+# ve yeni kampanya oluşturma butonunun çalıştığını doğrular.
+
 @smoke @regression @brand @overview
 Feature: Brand Dashboard Overview
   As a brand user

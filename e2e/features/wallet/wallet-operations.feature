@@ -1,3 +1,8 @@
+# Cüzdan İşlemleri Testleri
+# Bu test dosyası, influencer kullanıcısının cüzdan bakiyesini
+# görüntüleyebildiğini, para yatırma ve çekme formlarını
+# açabildiğini doğrular.
+
 @wallet
 Feature: Wallet Operations
   As an influencer user

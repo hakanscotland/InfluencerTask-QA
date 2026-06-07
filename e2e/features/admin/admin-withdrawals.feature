@@ -1,3 +1,8 @@
+# Admin Para Çekme Yönetimi Testleri
+# Bu test dosyası, admin kullanıcısının influencer para çekme taleplerini
+# görüntüleyebildiğini, onaylama işlemi yapabildiğini ve onay modalını
+# kullanabildiğini doğrular. Mobil uyumluluk dahildir.
+
 @admin @withdrawals
 Feature: Admin Withdrawal Management
   As an admin user

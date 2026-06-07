@@ -1,3 +1,8 @@
+# Marka Sidebar Navigasyon Testleri
+# Bu test dosyası, marka kullanıcısının sidebar üzerinden
+# tüm dashboard bölümlerine (genel bakış, kampanyalar, keşfet,
+# gönderiler, ayarlar vb.) gidebildiğini doğrular.
+
 @navigation @sidebar
 Feature: Sidebar Navigation
   As a logged-in user

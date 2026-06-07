@@ -1,3 +1,8 @@
+# Influencer Görev Teslim Testleri
+# Bu test dosyası, influencer kullanıcısının tamamlanmış görev
+# çalışmalarını teslim edebildiğini, görev kontrol listesini
+# kullanabildiğini ve teslim modalını görebildiğini doğrular.
+
 @regression @influencer
 Feature: Influencer Task Submission
   As an influencer

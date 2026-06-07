@@ -1,3 +1,8 @@
+# Influencer Sidebar Navigasyon Testleri
+# Bu test dosyası, influencer kullanıcısının sidebar üzerinden
+# tüm dashboard bölümlerine (genel bakış, kampanyalar, mesajlar,
+# ayarlar vb.) gidebildiğini doğrular.
+
 @navigation @sidebar
 Feature: Influencer Sidebar Navigation
   As an influencer user

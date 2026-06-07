@@ -1,3 +1,8 @@
+# Marka Gönderi İnceleme Testleri
+# Bu test dosyası, marka kullanıcısının influencer gönderilerini
+# görüntüleyebildiğini ve gönderi panelinin doğru yapısını
+# doğrular. Mobil uyumluluk dahildir.
+
 @brand @submissions
 Feature: Brand Submissions Review
   As a brand user

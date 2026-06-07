@@ -1,3 +1,8 @@
+# Bildirim Testleri
+# Bu test dosyası, kullanıcının bildirim sayfasını
+# görüntüleyebildiğini, bildirim listesini ve bildirim
+# ayarlarını görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @shared @notifications
 Feature: Notifications
   As a logged-in user

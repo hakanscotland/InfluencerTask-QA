@@ -1,3 +1,9 @@
+# Kullanıcı Giriş Testleri
+# Bu test dosyası, kullanıcıların platforma e-posta ve şifre ile
+# giriş yapabildiğini, hatalı girişlerde hata mesajı gösterildiğini,
+# form alanlarının doğru çalıştığını ve şifre görünürlüğü toggle'ının
+# işlevsel olduğunu doğrular.
+
 @smoke @regression
 Feature: User Authentication - Login
   As a registered user

@@ -1,3 +1,8 @@
+# Kampanya Oluşturma Testleri
+# Bu test dosyası, marka kullanıcısının kampanya sihirbazını
+# açabildiğini, adım 1'de temel bilgileri girebildiğini ve
+# adım 2'de görev oluşturabildiğini doğrular.
+
 @smoke @regression @brand
 Feature: Campaign Creation
   As a brand

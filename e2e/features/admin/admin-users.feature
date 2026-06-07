@@ -1,3 +1,8 @@
+# Admin Kullanıcı Yönetimi Testleri
+# Bu test dosyası, admin kullanıcısının platform kullanıcılarını
+# görüntüleyebildiğini, arama yapabildiğini ve rol/durum etiketlerini
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @admin @users
 Feature: Admin User Management
   As an admin user

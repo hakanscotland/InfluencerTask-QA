@@ -1,3 +1,8 @@
+# Admin Panel Genel Bakış Testleri
+# Bu test dosyası, admin kullanıcısının platform genel bakış sayfasını
+# görüntüleyebildiğini, istatistikleri ve hızlı erişim linklerini
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @admin @overview
 Feature: Admin Dashboard Overview
   As an admin user

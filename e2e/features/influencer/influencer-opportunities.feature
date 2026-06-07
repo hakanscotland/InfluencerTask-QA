@@ -1,3 +1,8 @@
+# Influencer Fırsat Testleri
+# Bu test dosyası, influencer kullanıcısının kampanya
+# fırsatlarını keşfedebildiğini ve uygun marka işbirliklerini
+# görebildiğini doğrular.
+
 @influencer @opportunities
 Feature: Influencer Opportunities
   As an influencer user

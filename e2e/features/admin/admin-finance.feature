@@ -1,3 +1,7 @@
+# Admin Finans ve Hazine Testleri
+# Bu test dosyası, admin kullanıcısının finans sayfasını
+# görüntüleyebildiğini ve para yatırma taleplerini görebildiğini doğrular.
+
 @admin @finance
 Feature: Admin Finance and Treasury
   As an admin user

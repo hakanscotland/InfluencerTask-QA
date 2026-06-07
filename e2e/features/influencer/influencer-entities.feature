@@ -1,3 +1,8 @@
+# Influencer Marka Testleri
+# Bu test dosyası, influencer kullanıcısının bağlı markaları
+# görüntüleyebildiğini ve marka varlıklarını yönetebildiğini
+# doğrular. Mobil uyumluluk dahildir.
+
 @influencer @entities
 Feature: Influencer Brands
   As an influencer user

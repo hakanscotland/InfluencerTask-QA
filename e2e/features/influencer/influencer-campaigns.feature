@@ -1,3 +1,9 @@
+# Influencer Kampanyalarım Testleri
+# Bu test dosyası, influencer kullanıcısının aktif ve geçmiş
+# kampanyalarını görüntüleyebildiğini, sekmeler arasında geçiş
+# yapabildiğini ve uygulama panelini görebildiğini doğrular.
+# Mobil uyumluluk dahildir.
+
 @influencer @campaigns
 Feature: Influencer My Campaigns
   As an influencer user

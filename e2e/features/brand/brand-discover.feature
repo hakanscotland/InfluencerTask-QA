@@ -1,3 +1,8 @@
+# Marka Keşfet Testleri
+# Bu test dosyası, marka kullanıcısının influencer keşfetme
+# sayfasını görüntüleyebildiğini, kategori filtrelerini
+# kullanabildiğini ve arama yapabildiğini doğrular. Mobil uyumluluk dahildir.
+
 @brand @discover
 Feature: Brand Discover Influencers
   As a logged-in user

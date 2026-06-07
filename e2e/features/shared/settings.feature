@@ -1,3 +1,8 @@
+# Kullanıcı Ayarları Testleri
+# Bu test dosyası, kullanıcının profil ayarları sayfasını
+# görüntüleyebildiğini ve profil formunu görebildiğini
+# doğrular. Mobil uyumluluk dahildir.
+
 @shared @settings
 Feature: User Settings
   As a logged-in user

@@ -1,3 +1,8 @@
+# Marka Kampanya Listesi Testleri
+# Bu test dosyası, marka kullanıcısının kampanyalarını
+# görüntüleyebildiğini, arama yapabildiğini ve yeni kampanya
+# sihirbazını açabildiğini doğrular. Mobil uyumluluk dahildir.
+
 @smoke @regression @brand @campaigns
 Feature: Brand Campaigns List
   As a brand user

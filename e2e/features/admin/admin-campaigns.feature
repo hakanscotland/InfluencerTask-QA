@@ -1,3 +1,8 @@
+# Admin Kampanya Moderasyon Testleri
+# Bu test dosyası, admin kullanıcısının kampanya moderasyon sayfasını
+# görüntüleyebildiğini ve kampanya tablosunu görebildiğini doğrular.
+# Mobil uyumluluk dahildir.
+
 @admin @campaigns
 Feature: Admin Campaign Moderation
   As an admin user

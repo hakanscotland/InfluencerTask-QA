@@ -1,3 +1,8 @@
+# Influencer Analitik Testleri
+# Bu test dosyası, influencer kullanıcısının performans analitik
+# sayfasını görüntüleyebildiğini ve veri veya boş durumu
+# görebildiğini doğrular. Mobil uyumluluk dahildir.
+
 @influencer @analytics
 Feature: Influencer Analytics
   As an influencer user
