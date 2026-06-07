@@ -18,8 +18,8 @@ for (const envPath of envPaths) {
 
 
 
-// Set global Cucumber step timeout to 60 seconds to account for Next.js compilation times in dev/CI mode
-setDefaultTimeout(60000);
+// Set global Cucumber step timeout to 120 seconds to account for cold starts and mobile CI
+setDefaultTimeout(120000);
 
 /**
  * Cucumber lifecycle hooks for Playwright browser management.

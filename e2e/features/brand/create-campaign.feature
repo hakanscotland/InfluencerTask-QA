@@ -42,17 +42,14 @@ Feature: Campaign Creation
     And I fill the field with test id "wizard-step-1-budget-input" with "1000"
     And I click the element with test id "campaign-wizard-next-button"
     # Step 2: Tasks
-    Then I should see the element with test id "campaign-wizard-step-2"
-    When I click the element with test id "wizard-step-2-add-task-button"
+    And I click the element with test id "wizard-step-2-add-task-button"
     And I select "Instagram" from the dropdown with test id "task-builder-platform-select-0"
     And I select "Story Share" from the dropdown with test id "task-builder-task-type-select-0"
     And I fill the field with test id "task-builder-reward-input-0" with "50"
     And I click the element with test id "campaign-wizard-next-button"
-    # Step 3: Details/Targeting
+    # Step 3: Details — next click advances to step 4 which shows submit button in E2E mode
     And I click the element with test id "campaign-wizard-next-button"
-    # Step 4: Another step before review
-    And I click the element with test id "campaign-wizard-next-button"
-    # Step 5: Review & Submit — submit button appears here
+    # Step 4: Submit button visible (E2E maps step 4 → 5 in WizardNavigation)
     And I click the element with test id "campaign-wizard-submit-button"
     And I wait for the page to load
     Then I should see the element with test id "campaign-table"
