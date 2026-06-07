@@ -46,6 +46,7 @@ const routes: Record<string, string> = {
   'settings subscription': '/settings/subscription',
   'pricing': '/pricing',
   'trending': '/trending',
+  'referrals': '/referrals',
 };
 
 function routeFor(pageName: string) {
