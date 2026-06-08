@@ -119,6 +119,8 @@ jobs:
           QA_BRAND_PASSWORD: ${{ secrets.QA_BRAND_PASSWORD }}
           QA_ADMIN_EMAIL: ${{ secrets.QA_ADMIN_EMAIL }}
           QA_ADMIN_PASSWORD: ${{ secrets.QA_ADMIN_PASSWORD }}
+          QA_CAMPAIGN_ADMIN_EMAIL: ${{ secrets.QA_CAMPAIGN_ADMIN_EMAIL }}
+          QA_CAMPAIGN_ADMIN_PASSWORD: ${{ secrets.QA_CAMPAIGN_ADMIN_PASSWORD }}
           E2E_RESET_SECRET: ${{ secrets.E2E_RESET_SECRET }}
           QA_INVALID_EMAIL: ${{ vars.QA_INVALID_EMAIL || 'invalid@invalid-domain-e2e.test' }}
           QA_INVALID_PASSWORD: ${{ secrets.QA_INVALID_PASSWORD || 'WrongPassword999!' }}
