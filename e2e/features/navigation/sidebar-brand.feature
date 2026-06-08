@@ -25,7 +25,7 @@ Feature: Sidebar Navigation
     And I should see the element with test id "sidebar-nav-link-brand-discover"
     And I should see the element with test id "sidebar-nav-link-brand-ai-brief"
     And I should see the element with test id "sidebar-nav-link-brand-media-tracking"
-    And I should see the element with test id "sidebar-nav-link-brand-messages"
+    And I should see the element with test id "header-messages-button"
 
   Scenario: Navigate to brand campaigns from sidebar
     When I click the element with test id "sidebar-nav-link-brand-campaigns"
