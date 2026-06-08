@@ -1,16 +1,16 @@
-# Admin Kampanya Moderasyon Testleri
-# Bu test dosyası, admin kullanıcısının kampanya moderasyon sayfasını
+# Kampanya Moderasyon Testleri
+# Bu test dosyası, campaign-admin kullanıcısının kampanya moderasyon sayfasını
 # görüntüleyebildiğini ve kampanya tablosunu görebildiğini doğrular.
 # Mobil uyumluluk dahildir.
 
 @admin @campaigns
 Feature: Admin Campaign Moderation
-  As an admin user
+  As a campaign admin user
   I want to review and moderate campaigns
   So that I can ensure quality content on the platform
 
   Background:
-    Given I am logged in as an "admin" user
+    Given I am logged in as a "campaign-admin" user
     And I navigate to the "admin campaigns" page
 
   Scenario: Campaign moderation page loads
