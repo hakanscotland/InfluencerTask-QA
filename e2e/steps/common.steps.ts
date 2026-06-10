@@ -1,10 +1,22 @@
 import { Given, When, Then, defineStep, setDefaultTimeout } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
+import type { Cookie } from '@playwright/test';
 import { CustomWorld } from '../support/world';
 import { optionalEnv, requiredEnv } from '../support/env';
 
 // Set global Cucumber step timeout to 30 seconds
 setDefaultTimeout(30000);
+
+/**
+ * storageState reuse: rol başına oturum cookie'lerini cache'ler.
+ * "I am logged in as a <role> user" arka plan adımı her senaryoda yeniden UI
+ * login yapmak yerine ilk login'in cookie'lerini tekrar kullanır. Böylece
+ * paralel koşuda aynı hesaba/IP'ye eşzamanlı login burst'ü (auth rate-limit
+ * 5/dk email+IP) tetiklenmez. Worker başına rol başına yalnızca 1 gerçek login.
+ * Not: Login akışını TEST eden explicit adımlar (configured credentials, switch
+ * user tab) bilinçli olarak bu cache'i kullanmaz — gerçek login'i doğrularlar.
+ */
+const sessionCookies: Record<string, Cookie[]> = {};
 
 /**
  * Common step definitions shared across all feature files.
@@ -278,7 +290,27 @@ Then('I should see an error message containing {string}', async function (this: 
 // ─── Auth Helpers ───
 
 defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: CustomWorld, role: string) {
+  const roleKey = role.toLowerCase();
   const user = credentialsForRole(role);
+
+  // 1) storageState reuse: bu rol için daha önce login olduysak cookie'leri enjekte
+  //    et ve doğrudan dashboard'a git — yeniden UI login (ve rate-limit) yok.
+  if (sessionCookies[roleKey]?.length) {
+    try {
+      await this.context.addCookies(sessionCookies[roleKey]);
+      await this.page.goto(localizedPath('/dashboard'), { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await this.page.waitForLoadState('networkidle').catch(() => {});
+      if (!this.page.url().includes('/login')) {
+        return; // cached oturum geçerli → UI login atlandı
+      }
+    } catch {
+      // düş: aşağıda gerçek login denenecek
+    }
+    // cache stale (ör. token süresi doldu) → temizle ve gerçek login yap
+    delete sessionCookies[roleKey];
+  }
+
+  // 2) Gerçek UI login (rol başına ilk kez veya cache geçersizse)
   let attempts = 0;
   const maxAttempts = 3;
 
@@ -298,8 +330,10 @@ defineStep(/^I am logged in as (?:a|an) "([^"]*)" user$/, async function (this: 
         const p = url.pathname;
         return p.includes('/dashboard') || p.includes('/brand') || p.includes('/influencer') || p.includes('/admin');
       }, { timeout: 15000 });
-      
+
       await this.page.waitForLoadState('networkidle').catch(() => {});
+      // Başarılı login → cookie'leri sonraki senaryolar için cache'le.
+      sessionCookies[roleKey] = await this.context.cookies();
       return; // Success!
     } catch (err: any) {
       if (attempts >= maxAttempts) {
