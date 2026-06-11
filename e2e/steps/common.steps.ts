@@ -53,6 +53,7 @@ const routes: Record<string, string> = {
   'admin withdrawals': '/admin/withdrawals',
   'admin users': '/admin/users',
   'admin submissions': '/admin/submissions',
+  'admin partnership': '/admin/partnership',
   'wallet': '/wallet',
   'settings': '/settings',
   'settings subscription': '/settings/subscription',
